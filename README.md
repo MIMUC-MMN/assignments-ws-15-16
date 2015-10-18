@@ -19,7 +19,9 @@ pull requests if you want your code to appear in the main repository here.
 2. You can join the [**students-15-16**](https://github.com/orgs/MIMUC-MMN/teams/students-ws-15-16) team and push directly to the repository. It is crucial that you follow the code
  of conduct.
  
-Make sure to add your work in the correct folder, e.g. a01. 
+3. Clone the repository and create a branch `firstname-lastname`. Push your code to this repository and let us know that you contributed.
+ 
+Make sure to add your work in the correct folder, e.g. assignment-01. 
 
 ## Code of Conduct ##
 1. Do not commit code, that generates error messages.  
@@ -31,3 +33,4 @@ Make sure to add your work in the correct folder, e.g. a01.
 
 ## Links ##
 1. Official website: https://www.medien.ifi.lmu.de/lehre/ws1516/mmn/
+2. Official twitter: https://twitter.com/MMN_WS1516 
