@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Task 1: Shapes on Canvas</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+
+  <canvas width="400" height="400" />
+
+  <script>
+    var ctx = document.querySelector('canvas').getContext('2d');
+
+    // Star
+    var alpha = (2*Math.PI) / (2*5);
+    var radius = 32;
+    var center = [32,128]
+    ctx.beginPath();
+    for(var i = (2*5) + 1; i != 0; i--)
+    {
+        var r = radius * (i%2 + 1)/2;
+        var omega = alpha * i;
+        ctx.lineTo(
+            (r * Math.sin(omega)) + center[0],
+            (r * Math.cos(omega)) + center[1]);
+    }
+    ctx.closePath();
+    ctx.fillStyle = "#000";
+    ctx.fill();
+
+    // Diamond
+    var height = 64;
+    var width = 32;
+    ctx.beginPath();
+    ctx.moveTo(128, 100);
+    ctx.lineTo(128-width/2, 100 + height/2);
+    ctx.lineTo(128, 100 + height);
+    ctx.lineTo(128+width/2, 100 + height/2);
+    ctx.closePath();
+    ctx.fillStyle = "#000";
+    ctx.fill();
+
+    // Heart
+    ctx.beginPath();
+    ctx.moveTo(75,40);
+    ctx.bezierCurveTo(75,37,70,25,50,25);
+    ctx.bezierCurveTo(20,25,20,62.5,20,62.5);
+    ctx.bezierCurveTo(20,80,40,102,75,120);
+    ctx.bezierCurveTo(110,102,130,80,130,62.5);
+    ctx.bezierCurveTo(130,62.5,130,25,100,25);
+    ctx.bezierCurveTo(85,25,75,37,75,40);
+    ctx.closePath();
+    ctx.fill();
+  </script>
+  </body>
+</html>
