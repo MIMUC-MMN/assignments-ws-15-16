@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Task 1: Shapes on Canvas</title>
+    <script src="paint.js"></script>
+    <style>
+      canvas {
+        border: 1px solid black;
+        cursor: crosshair;
+      }
+      .btn-color {
+        width: 1.5em;
+        height: 1.5em;
+      }
+      .colorpicker .active {
+        border: 2px dotted black;
+      }
+    </style>
+  </head>
+  <body>
+  <section class="paint-container">
+    <div class="toolbar">
+      <label>
+        &#x270e; <input class="btn-pensize" type="range"
+                        min="1" max="64"/>
+      </label>
+      <button class="btn-undo" disabled="true">&#x21b6;</button>
+      <button class="btn-redo" disabled="true">&#x21b7;</button>
+      <button class="btn-save">Save</button>
+    </div>
+    <div class="colorpicker">
+      <label>
+        Custom color:  <input class="color-custom" type="color" />
+      </label>
+    </div>
+    <canvas width="800" height="600" />
+  <script>
+    var paint = new CanvasPaint(document.querySelector(".paint-container"))
+  </script>
+  </body>
+</html>
