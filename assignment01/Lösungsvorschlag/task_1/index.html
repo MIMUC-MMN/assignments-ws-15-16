@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HTML 5</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+    <nav>
+        <button id="heart" onclick="drawHeart()">Heart</button>
+        <button id="star" onclick="strokeStar(80, 6, 300, 300)">Star</button>
+        <button id="star" onclick="fillStar(100, 15,'#206eb2', 300, 300)">Filled Star</button>
+        <button id="star" onclick="drawStars(100, 28)">Radnom Stars</button>
+        <button id="diamond" onclick="drawDiamond()">Diamond</button>
+        <button id="question" onclick="drawQuestionmark()">Questionmark</button>
+    </nav>
+    <canvas id="canvas" width="600" height="600">
+    Your browser does not support the HTML5 canvas tag.
+    </canvas>
+
+<script>
+    
+// #PETER: Your code uses both german and english comments. It would be good to stick to one language for consistency.
+// The same is true for your variables. You have a 'drawStar' function that takes a context and 'radWinkelAußen'? You should
+// try to stick to english for variable, parameter and function names.
+    
+function drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos){
+    // #PETER: It's not considered good style to modify function parameters. You can store them in a new variable and
+    // modify the new variable afterwards. E.g.:
+    // var radiusOutTemp = radWinkelAußen;
+    // while(radiusOutTemp <= 2*Math.PI) {
+    //     ...
+    //     radiusOutTemp += radWinkel;
+    // }
+    
+    while(radWinkelAußen <= 2*Math.PI){
+        
+        x_aussen = x_pos + Math.cos(radWinkelAußen) * radius;  
+        y_aussen = y_pos + Math.sin(radWinkelAußen) * radius;
+        
+        x_innen = x_pos + Math.cos(radWinkelInnen) * radius/2;  
+        y_innen = y_pos + Math.sin(radWinkelInnen) * radius/2;
+
+        radWinkelAußen += radWinkel;
+        radWinkelInnen += radWinkel;
+        context.lineTo(x_aussen, y_aussen);
+        context.lineTo(x_innen, y_innen);
+    }
+}
+
+function strokeStar(radius, zacken, x_pos, y_pos){
+    
+     // Flexible radius and or amount of edges, size not checked for plausability
+    
+    var context = prepareCanvas(),
+        gradWinkel = 360/zacken,
+        radWinkel = gradWinkel*Math.PI/180,
+        radWinkelAußen = 0, 
+        radWinkelInnen = radWinkel/2; //Winkel verschieben 
+
+    context.beginPath();
+    drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos);
+    
+    //Close star if edges are not even (only for stroke)
+    if(zacken % 2 !==0){
+        x_aussen = x_pos + Math.cos(radWinkelAußen) * radius;  
+        y_aussen = y_pos + Math.sin(radWinkelAußen) * radius;
+        context.lineTo(x_aussen, y_aussen);
+    
+    }    
+    context.lineWidth=1;
+    context.stroke();
+    
+}
+            
+function fillStar(radius, zacken, farbe, x_pos, y_pos, context){
+    
+    // Flexible radius and or amount of edges, size not checked for plausability
+    
+    // Must canvas be initialised?
+    if(!context){
+        // #PETER: Warning! You are overshadowing the context variable. You should set context without the 'var' keyword
+        // context = prepareCanvas();
+        var context = prepareCanvas();
+    }
+    
+    var gradWinkel = 360/zacken,
+        radWinkel = gradWinkel*Math.PI/180,
+        radWinkelAußen = 0, 
+        radWinkelInnen = radWinkel/2; //Winkel verschieben 
+
+    context.beginPath();
+    drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos);
+    context.fillStyle = farbe;
+    context.fill();
+    context.closePath();
+}
+
+
+// Draw multiple stars, takes max radius (min= 30px) and max edges (min = 4)     
+function drawStars(maxRadius, maxZacken){
+    var context = prepareCanvas();
+    
+    for(i=0; i<80; i++){
+        
+        radius = randomise(30,maxRadius);
+        x_pos = randomise(0,600);
+        y_pos = randomise(0,600);
+        zacken = randomise(4,maxZacken);
+
+        farbe =  '#'+Math.floor(Math.random()*16777215).toString(16);
+        
+        fillStar(radius, zacken, farbe, x_pos, y_pos, context);
+    }
+}    
+        
+    
+
+function drawDiamond(){
+   
+    // Uses a set of predefinded non flexible coordinates 
+    var context = prepareCanvas(),
+        
+         array = [["move",250,200], ["draw",380,200], ["draw",400,230], ["draw",315,300],       
+                 ["draw",225,230], ["draw",250,230], ["draw",400,230], ["move",225,230],    
+                 ["draw",250,200], ["draw",270,230], ["draw",315,200], ["draw",360,230], 
+                 ["draw",380,200], ["move",360,230], ["draw",315,300], ["draw",270,230], 
+                 ["move",315,300], ["draw",315,200]];
+    
+    // #PETER: The 'for ... of ...' syntax is part of the ES2015 standard and not supported by
+    // all major browsers yet. It is mostly meant to be used with iterator-based objects. You
+    // can learn more here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
+    // Meanwhile, you could use the 'for ... in ...' syntax for your array:
+    // for (value in array) {
+    for(value of array){
+        if(value[0] == "move")
+            context.moveTo(value[1],value[2]);
+        else
+            context.lineTo(value[1], value[2]);
+    }
+    context.lineWidth=2;
+    context.stroke();
+}
+    
+function drawHeart(){
+    
+    // Uses a set of predefinded non flexible coordinates 
+    var context = prepareCanvas(), 
+        array = [[125,200], [165, 50,300, 150], [430, 50,475, 200], 
+                 [505, 345,300, 440], [85, 345,125, 200]]
+    
+    // #PETER: Better use
+    // for (value in array) {
+    for(value of array){
+        if(value.length == 2)
+            context.moveTo(value[0],value[1]);
+        else
+            context.quadraticCurveTo(value[0], value[1],value[2], value[3]);
+    }
+    context.fillStyle = "#f2352f";
+    context.fill();
+}    
+    
+function drawQuestionmark(){
+    
+    var context = prepareCanvas();
+    context.moveTo(275,200);
+    context.bezierCurveTo(275, 150, 350, 150,350, 200);
+    context.bezierCurveTo(340, 260, 310, 190,305, 270);
+    context.lineWidth=20;
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(305,275);
+    context.lineTo(305, 290);
+    context.stroke();
+
+}    
+    
+
+function randomise(min, max) {
+    return Math.random() * (max - min) + min;
+}
+    
+function prepareCanvas(){
+    var canvas = document.getElementById("canvas"),
+        context = canvas.getContext("2d");
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.beginPath();
+    return context;
+}
+    
+</script>
+</body>
+</html>
