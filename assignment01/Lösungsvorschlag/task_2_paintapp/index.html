@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HTML 5</title>
+    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="css/print.css" type="text/css" media="print"/>
+</head>
+
+<body>
+ 
+    <div id="wrapper">
+        <div id="title"> <h1>Canvas Paint</h1>
+            <h2>HTML5 paint app with dynamic canvas color picker</h2>
+        </div>
+        <nav>
+           <ul>
+               <li id="newFile"><img src="img/Add_File-32.png" alt="Create new file"/></li>
+               <li id="delete"><img src="img/Delete-32.png" alt="Undo last action"/></li>
+               <li id="print"><img src="img/Print-32.png" alt="Save to LocalStorage"/></li>
+               <li id="export"><img src="img/Screenshot-32.png" alt="Convert to PNG"/></li>
+               <li id="undo"><img src="img/Undo-32.png" alt="Undo last action"/></li>
+               <li id="redo"><img src="img/Redo-32.png" alt="Redo last action"/></li>
+               <hr/>
+               <li id="pen" class="active"><img src="img/pen-32.png" alt="Convert to PNG"/></li>
+               <li id="brush"><img src="img/Brush-32.png" alt="Convert to PNG"/></li>
+               <li id="marker"><img src="img/Marker-32.png" alt="Convert to PNG"/></li>
+               <li id="spray"><img src="img/Spray-32.png" alt="Convert to PNG"/></li>
+               <input id="size" type="range"  min="1" max="10" step="1" value="1"/>
+            </ul>
+            <hr/>
+               <div id="foregroundColor">
+                   <div class="color">
+                       <div class="pickerWrapper">
+                           <h2>stroke color</h2><br>
+                           <div class="selectHueWrapper">
+                               <canvas class="hueCanvas" width="200" height="200">
+                                    Your browser does not support the HTML5 canvas tag.
+                                </canvas>
+                               <div class="hueSelector"></div>
+                            </div>
+                           <div class="selectColorWrapper">
+                               <canvas class="selectColorCanvas" width="25" height="200">
+                                    Your browser does not support the HTML5 canvas tag.
+                                </canvas>
+                                <div class="selectSelector"></div>
+                            </div>
+                      </div>
+                   </div>
+               </div>
+        </nav>
+        <canvas id="canvas" width="740" height="500">
+        Your browser does not support the HTML5 canvas tag.
+        </canvas>
+    </div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

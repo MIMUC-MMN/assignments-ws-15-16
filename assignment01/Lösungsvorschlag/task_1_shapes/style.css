@@ -1,0 +1,22 @@
+nav{
+    width: 600px;
+    margin: 50px auto 0;
+}
+
+button{
+    border: none;
+    background: #ccc;
+    padding: 10px;
+    font-weight: bold;
+    color: #555;
+}
+button:hover{
+    background: #aaaaaa;
+    cursor: pointer;
+}
+canvas{
+    display:block;
+    margin: 5px auto; 
+    border:none; 
+    background:#efefef;
+}
