@@ -1,0 +1,17 @@
+Task 1 - Flaws:
+    - As no from method is specified, the standard form method "get" will be used. Get should not be 
+      used with sensitive data as it is visible in the browser's url field.
+
+    - The if statment uses $_POST['submit'], which value is not specified in the form. 
+    
+    - "Name" properties are not defined for email and password
+    
+    - There is no check if the sent strings are empty
+    
+    - No error message (e.g. if only email but no password was entered)
+    
+    - Data input is not validated. Invalid submitted data can lead to security issues 
+      like Cross-Site Scripting attacks)
+
+    
+    
