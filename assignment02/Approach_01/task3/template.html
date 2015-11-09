@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+    <meta charset="UTF-8" />
+    <title>Secure login form</title>￼￼ 
+    <link rel="stylesheet" href="reset.css"/>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <form action="index.php" method="post">
+        <div id="errorMsg">{errorMsg}</div>
+        <label>Firstname:<input type="text" name="firstname" value="{firstname}"></label>
+        <label>Name:<input type="text" name="lastname" value="{firstname}"></label>
+        </div>
+        <label>Email:<input type="text" name="email" value="{email}"></label>
+        <label>Password:<input type="password" name="password" value="{password}"></label>
+        <label>Password confirmation:<input type="password" name="confPassword" value="{confPassword}"></label>
+        <label>Subject:
+            <select name="subject">
+                <option value="1"{select1}>Praise</option>
+                <option value="2"{select2}>Critism</option>
+                <option value="3"{select3}>Other</option>
+            </select>
+        </label>
+        <label>Message:<textarea name="message">{message}</textarea></label>
+        <div id="captcha"><img src="captcha/{captchaId}.png"/></div>
+        <input style="display:none" type="text" name="captchaId" value="{captchaId}">
+        <label>Please input the characters above:<input type="text" name="captchaValue"></label>
+        <input type="submit" name="submit"/>
+    </form>
+    <div id="entry">
+        {entry}
+    </div>
+</body>
+</html>

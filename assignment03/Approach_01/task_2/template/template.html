@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>CodeBreaker</title>￼￼ 
+    <link rel="stylesheet" href="template/css/reset.css"/>
+    <link rel="stylesheet" href="template/css/style.css"/>
+</head>
+<body>
+    {errorMsg}
+    <div id="main">
+        <div class="float">
+            <h4>{trials}</h4>
+            {rows}
+        </div>
+        <div class="float">
+            <h4>Code eingeben:</h4>
+            <form id="form" action="index.php" method="post">
+                <input type="text" name="letter[]" maxlength="1" autofocus/>
+                <input type="text" name="letter[]" maxlength="1"/>
+                <input type="text" name="letter[]" maxlength="1"/>
+                <input type="text" name="letter[]" maxlength="1"/>
+                <input type="submit" value="Check"/>
+            </form>
+                <a href="index.php?restart=true"><div class="button">Restart</div></a>
+                <div id="openModal" class="button help">?</div>
+                <div class="gamestat">
+                    <h5>{status}</h5> 
+                    <p>{code}</p>
+                </div>
+        </div>
+    </div>
+        <!-- Modal window -->
+    <div id="modalWindow">
+        <span id="close">x</span>
+        <h4>Rules of the game</h4>
+        <br>
+        <p>
+            The player has to guess a four-letter code. The code is formed of a random combination of the letters A, B, C, D, E, F, or G. 
+            Every letter can only appear once in it. A player has ten trials to break the code. To play the game the player has to enter 
+            one of the allowed characters in each of the four input fields. Player get a new hint every round until they found out the c
+            ode. The hint has the following semantics:
+        </p>
+            <ul>
+                <li>A red dot indicates that one of the guessed letters is part of the code and also at the correct position.</li>
+                <li>A black dot indicates that one of the guessed letters is part of the code but not at the correct position</li>
+                <li>A white dot indicates that a letter is not part of the code.</li>
+            </ul>
+        <p>
+            I a guess contains a duplicate letters or a character from outside the limited alphabet, the guess will not be counted or 
+            displayed.
+        </p>
+        <p>
+            You won if you guessed correct. To restart the game press the restart button. You can restart a game to any time.
+        </p>
+        <br>
+        <b>Good luck!</b>
+    </div>
+    <div id="modalBackground"></div>
+</body>
+    <script src="template/js/main.js"></script>
+</html>

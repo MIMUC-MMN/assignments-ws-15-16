@@ -1,0 +1,84 @@
+html, body{
+    font-family: sans-serif;
+    font-size: 0.95em;
+}
+
+h4{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+h5{
+    font-weight: bold;
+    font-size: 12px;
+}
+
+p{
+    padding: 5px 0;
+    font-size: 12px;
+}
+
+form{
+    display: block;
+    float: left;
+    margin: 25px 50px;
+    width:  300px;
+    height: 100px;
+    height: auto;
+}
+
+
+label, input, textarea{
+    display: block;
+    clear: both;
+    width: 100%;
+}
+
+input, select{
+    margin: 5px 0 20px 0;
+    height: 28px;
+	border:1px solid #ccc;
+}
+textarea{
+    height: 150px;
+    margin: 5px 0 15px 0;
+	border:1px solid #ccc;
+}
+
+
+input[type="submit"]{
+		width:100px;
+		height:30px;
+		background:#09C;
+		color:#fff;
+		border:none;
+		transition: 0.25s ease-in-out;
+
+}
+input[type="submit"]:hover{
+		background:#666;
+}
+
+#errorMsg{
+    margin: 20px 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ff0000;
+}
+
+#entry{
+    float: left;
+    margin: 45px 50px; 
+    width: 350px;
+    height: 600px;
+    overflow-y: scroll;
+}
+
+.row:nth-child(even){
+    padding: 20px;
+    background: #e8e8e8;
+}
+.row:nth-child(odd){
+    padding: 20px;
+    background: #f0f0f0;
+}

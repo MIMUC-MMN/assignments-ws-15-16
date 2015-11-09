@@ -1,0 +1,3 @@
+Task4: Future Task::
+
+Create a small calculator (+ - / *) that takes two values and echo the result in the first field (to reuse it). Make sure your application is robust and uses the basic mathematical rules (e.g. division through 0). 
