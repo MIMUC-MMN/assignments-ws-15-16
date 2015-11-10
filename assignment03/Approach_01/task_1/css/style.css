@@ -67,7 +67,7 @@ input[type="button"]:last-child{
 
 /* ## Style cookieLaw box ## */
 /* Demonstrating CSS3 transition property*/
-#coockieLaw{
+#cookieLaw{
     position: fixed;
     overflow: hidden;
     width: 100%;
@@ -84,7 +84,7 @@ input[type="button"]:last-child{
 
 
 /* Or another way using animations with custom Keyframe animations*/
-#coockieLaw.visible{
+#cookieLaw.visible{
     display: block;
     -moz-animation-name: slideUp;          /* Older Firefox browsers */
     -moz-animation-duration: 500ms;        /* Older Firefox browsers */

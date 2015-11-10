@@ -41,21 +41,21 @@ function getCookie(cname) {
 // Check if cookieBox must be displayed. Called when DOM is ready
 function loadCookieBox(){
     
-    var hideCoockieBox = getCookie('hideCoockieBox');
-    if(hideCoockieBox !== "true")
+    var hideCookieBox = getCookie('hideCookieBox');
+    if(hideCookieBox !== "true")
         showCookieBox();
 }
 
 // Show box
 function showCookieBox(){
-    getById('coockieLaw').className = "visible";
+    getById('cookieLaw').className = "visible";
 }
 
 // Hide box once it was visible
 function hideCookieBox(){
     
-    // Hide CoockieBox
-    getById('coockieLaw').className = "";
+    // Hide CookieBox
+    getById('cookieLaw').className = "";
     
     // Check timeout and if true set cookie
     trySetCookie();
@@ -100,15 +100,15 @@ function timeoutListener(){
 function trySetCookie(){
     
     // Get parameters form DOM
-    var coockieBoxClass = getById('coockieLaw').className,
+    var cookieBoxClass = getById('cookieLaw').className,
         timeout         = getByElement('body').getAttribute('data-timeout'),
         doNotTrack      = getById('doNotTrack').checked;
     
     // Check timeout and set cookie if possible
-    if((coockieBoxClass !== "visible") && timeout === "true"){
+    if((cookieBoxClass !== "visible") && timeout === "true"){
 
         // prevent box to be shown on page reload
-        document.cookie="hideCoockieBox=true";
+        document.cookie="hideCookieBox=true";
         
         // Set doNotTrack cookie if checkbox was checked
         if(doNotTrack)
