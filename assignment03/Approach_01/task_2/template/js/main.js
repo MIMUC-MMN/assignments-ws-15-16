@@ -33,11 +33,12 @@ function showModal(){
 
 // Hide modal
 function hideModal(){
-    // Hide CookieBox
+    // Hide CoockieBox
     getById('modalWindow').className = "";
 }
 
 function keypressListener(event){
+    console.log(event.which);
     // Ignore shift keypress
     if(!event.shiftKey){
         var allowedCharsArr = ["A", "B", "C", "D","E","F","G"]; // Allowed characters
@@ -58,7 +59,7 @@ function keypressListener(event){
                 //    getById("form").submit();
             }
             // Otherwise mark it red
-            else{
+            else if (event.which !== 16 && value.length >0) {
                 event.target.style.color = "#ff0000";
                 console.log("error")
             }

@@ -30,7 +30,8 @@ function countCorrectAnswers($guessesArray, $counter){
     $guessesColorArray = $guessesArray[$counter]['color'];
     if(is_array($guessesColorArray)){
         $correctAnswers = array_count_values($guessesColorArray); // Count the occurens...
-        return $correctAnswers['red']; // ...of "red" (correct answers)...
+        if(isset($correctAnswers['red']))
+            return $correctAnswers['red']; // ...of "red" (correct answers)...
      }
      else
         return 0;
