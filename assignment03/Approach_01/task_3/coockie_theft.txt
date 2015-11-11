@@ -1,0 +1,42 @@
+====================
+Cookie Theft
+====================
+
+
+
+Method 1: Session fixation
+===============================
+Description: 
+The attacker uses a valid session Id (from a vulnerable website) and passes this session parameters to a victim (e.g. via a link). If the victim uses this link to login on a web service, the attacker gets access trough the account using the same session id.
+
+Possible Solutions: 
+-> Prevent the usage of sessions if not required
+-> Do not accept session identifiers from POST/GET variables, store session id in cookie instead
+-> Always regenerate sessionId during the login process without relation to previous sessions
+-> Regenerate SID on each request
+-> Validate session connections using fingerprints, ip-ranges, or expire dates 
+
+
+Method 2: Session sidejacking
+===============================
+Attacker sniffes network traffic (e.g. in public wifi) and steals cookie with session informations.
+
+-> SSL Encryption for full client-server communication
+
+
+Method 3: Cross-site scripting
+===============================
+Description:
+An attacker prepares a website (e.g. a guestbook or a comment field) with executable code (e.g. Javascript) to read password or session from cookies and pass these to the attacker.
+
+-> Do not store passwords in cookies
+-> Safely validating untrusted HTML input (e.g. using PHPs  sanitizing functions)
+-> Validate session connections using fingerprints, ip-ranges, or expire dates 
+
+
+
+__________________________________________________________________________________
+Non academic Sources:
+https://en.wikipedia.org/wiki/Session_hijacking
+https://en.wikipedia.org/wiki/Cross-site_scripting
+https://en.wikipedia.org/wiki/Session_fixation

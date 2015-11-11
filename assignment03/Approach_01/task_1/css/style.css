@@ -1,0 +1,132 @@
+/* ## Basic styling ## */
+html, body{
+    font-family: sans-serif;
+    height: 125%; /*I did not read the scrolling thing before... It know it does not make sense for this webiste */
+}
+
+h1{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+b{
+    font-weight: bold;
+}
+
+p{
+    font-size: 14px;
+}
+
+/* ## Style pseudo search engine ## */
+#wrapper{
+    position: absolute;
+    text-align: center;
+    width: 480px;
+    height: 230px;
+    margin: -115px 0 0 -235px;
+    top: 50%;
+    left: 50%;
+}
+
+input[type="text"]{
+    width: 458px;
+    padding: 10px;
+    margin-bottom: 20px;
+    height: 15px;
+    cursor: pointer;
+    border: 1px #ddd solid;
+    outline: none;
+    font-size: 16px;
+}
+
+input[type="text"]:focus{
+    border-color: #4D90FE;
+}
+
+input[type="button"]{
+    width: 120px;
+    padding: 5px;
+    height: 30px;
+    background: #eee;
+    outline: none;
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+    border: none;    
+}
+
+input[type="button"]:hover{
+    background: #e0e0e0;
+}
+
+input[type="button"]:last-child{
+    margin-left: 10px;
+}
+
+
+/* ## Style cookieLaw box ## */
+/* Demonstrating CSS3 transition property*/
+#cookieLaw{
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 105px;
+    left: 0;
+    bottom: -105px;
+    background: rgba(240,240,240,0.8);
+    border-top: 1px solid #E4E4E4;
+    color: #444444;
+	-moz-transition-duration: 500ms;       /* Older Firefox browsers */
+	-webkit-transition-duration: 500ms;    /* Older Chrome and Safari browsers */
+	transition-duration: 500ms;            /* Proposed W3C syntax */
+}
+
+
+/* Or another way using animations with custom Keyframe animations*/
+#cookieLaw.visible{
+    display: block;
+    -moz-animation-name: slideUp;          /* Older Firefox browsers */
+    -moz-animation-duration: 500ms;        /* Older Firefox browsers */
+    -webkit-animation-name: slideUp;       /* Older Chrome and Safari browsers */
+    -webkit-animation-duration: 500ms;     /* Older Chrome and Safari browsers */
+    animation-name: slideUp;               /* Proposed W3C syntax */
+    animation-duration: 500ms;             /* Proposed W3C syntax */
+    bottom: 0;
+}
+
+    /* CSS3 Keyframes to be used with CSS3 animation-name property */
+
+    /* Older Firefox browsers */
+    @-moz-keyframes slideUp {
+        from {bottom: -105px;}
+        to {bottom: 0px; }
+    }
+
+    /* Older Chrome and Safari browsers */
+    @-webkit-keyframes slideUp {
+        from {bottom: -105px;}
+        to {bottom: 0px; }
+    }
+
+    /* Proposed W3C syntax */
+    @keyframes slideUp {
+        from {bottom: -105px;}
+        to {bottom: 0px;}
+    }
+
+.lawText{
+    width: 75%;
+    height: 50px;
+    margin: 25px auto;
+}
+
+.close{
+    position: absolute;
+    font-size: 20px;
+    top: 20px;
+    right: 40px;
+    cursor: pointer;
+}
+
+

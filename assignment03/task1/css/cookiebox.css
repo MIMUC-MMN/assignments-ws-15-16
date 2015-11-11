@@ -1,0 +1,78 @@
+/**
+ * Styles for the Cookie-Box
+ */
+
+#cookie-box {
+
+    box-sizing: border-box;
+
+    position: fixed;
+    bottom: 0;
+
+    background-color: #51a0fd;
+    border: 1px solid #3e5fa8;
+    display: block;
+    height: 94px;
+    padding: 10px 20px;
+    width: 100%;
+
+    -webkit-animation: slide_up 1s ease-out;
+    -moz-animation: slide_up 1s ease-out;
+    -o-animation: slide_up 1s ease-out;
+    animation: slide_up 1s ease-out;
+}
+
+@-webkit-keyframes slide_up {
+    from {
+        bottom: -94px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@-moz-keyframes slide_up {
+    from {
+        bottom: -94px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@-o-keyframes slide_up {
+    from {
+        bottom: -94px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@keyframes slide_up {
+    from {
+        bottom: -94px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+#cookie-box #cookie-box-content {
+    font-size: 20px;
+    color: #fff;
+}
+
+#cookie-box .close {
+    display: block;
+    float: right;
+    font-weight: bold;
+    text-decoration: none;
+    font-style: normal;
+    padding: 5px;
+}
+
+#cookie-box .close:hover {
+    cursor: pointer;
+    color: #000;
+}

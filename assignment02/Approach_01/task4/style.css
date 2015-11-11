@@ -1,0 +1,80 @@
+/*	--------------------------------------------------
+Container
+-------------------------------------------------- */
+div#container, div.container { position: relative; width: 940px; margin: 0 auto; padding: 0; }
+ 
+ 
+/*	--------------------------------------------------
+Grid
+-------------------------------------------------- */
+.column-row, .row { margin: 0 0 18px -20px; }
+.column, .columns { float: left; display: inline; margin: 0 0 0 20px; }
+ 
+.one { width: 60px; }
+.two { width: 140px; }
+.three { width: 220px; }
+.four { width: 300px; }
+.five { width: 380px; }
+.six { width: 460px; }
+.seven { width: 540px; }
+.eight { width: 620px; }
+.nine { width: 700px; }
+.ten { width: 780px; }
+.eleven { width: 860px; }
+.twelve { width: 940px; }
+ 
+.offset-by-one-half { margin-left: 40px; }
+.offset-by-one { margin-left: 80px; }
+.offset-by-two { margin-left: 160px; }
+.offset-by-three { margin-left: 240px; }
+.offset-by-four { margin-left: 320px; }
+.offset-by-five { margin-left: 400px; }
+.offset-by-six { margin-left: 480px; }
+.offset-by-seven { margin-left: 560px; }
+.offset-by-eight { margin-left: 640px; }
+.offset-by-nine { margin-left: 720px; }
+.offset-by-ten { margin-left: 800px; }
+ 
+/* Clear the columns automagically, thanks @kneath */
+.column-row:after, .row:after, .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+* html .column-row, * html .row, * html .clearfix { height: 1%; }
+.column-row, .row, .clearfix { display: inline-block; }
+.column-row, .row, .clearfix { display: block; }
+ 
+/*	IE6 Problems ---------- */
+body.ie .column-row { width: 960px; }
+body.ie .eight .column-row	 { width: 640px; }
+body.ie .nine .column-row	 { width: 720px; }
+body.ie .ten .column-row	 { width: 800px; }
+body.ie .eleven .column-row { width: 880px; }
+body.ie .two-thirds .column-row { width: 640px; }
+
+input[type="text"]{
+	margin-top:50px;
+	width:198px;
+	height:28px;
+	border:1px solid #ccc;
+	}
+
+input[type="submit"]{
+		width:50px;
+		height:30px;
+		margin-top:50px;
+		background:#09C;
+		color:#fff;
+		border:none;
+		transition: 0.25s ease-in-out;
+
+}
+input[type="submit"]:hover{
+		background:#666;
+}
+	
+.middle{
+	width:30px;
+	margin: 10px auto;
+	}	
+	
+#zahl1 input{
+	float:right;
+	}

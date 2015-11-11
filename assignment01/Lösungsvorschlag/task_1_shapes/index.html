@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Shapes on an HTML5 canvas</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+<nav>
+    <button id="heart" onclick="drawHeart()">Heart</button>
+    <button id="strokeStar" onclick="strokeStar(80, 6, 300, 300)">Star</button>
+    <button id="fillStar" onclick="fillStar(100, 15,'#206eb2', 300, 300)">Filled Star</button>
+    <button id="randomStars" onclick="drawStars(100, 28)">Random Stars</button>
+    <button id="diamond" onclick="drawDiamond()">Diamond</button>
+    <button id="question" onclick="drawQuestionMark()">Question Mark</button>
+</nav>
+<canvas id="canvas" width="600" height="600">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+
+<script>
+
+
+    /*
+
+     #TOBI_S TODO this code needs some more explanatory comments of what's going on in the drawing functions.
+
+     */
+
+
+    function drawStar(context, outerRadianAngle, innerRadianAngle, radianAngle, radius, x_pos, y_pos) {
+        var xOutside, yOutside, xInside, yInside;
+
+
+        //#TOBI_S TODO this is not self explanatory. Please clarify what's going on here. What's the main idea behind it?
+        while (outerRadianAngle <= 2 * Math.PI) {
+
+            xOutside = x_pos + Math.cos(outerRadianAngle) * radius;
+            yOutside = y_pos + Math.sin(outerRadianAngle) * radius;
+
+            xInside = x_pos + Math.cos(innerRadianAngle) * radius / 2;
+            yInside = y_pos + Math.sin(innerRadianAngle) * radius / 2;
+
+            outerRadianAngle += radianAngle;
+            innerRadianAngle += radianAngle;
+            context.lineTo(xOutside, yOutside);
+            context.lineTo(xInside, yInside);
+        }
+    }
+
+    function strokeStar(radius, edgeCount, x_pos, y_pos) {
+
+        // Flexible radius and or amount of edges, size not checked for plausibility
+
+        var context = resetCanvas(),
+                angleDegree = 360 / edgeCount,
+                angleRadian = angleDegree * Math.PI / 180,
+                outerRadianAngle = 0,
+                innerRadianAngle = angleRadian / 2; //shift angle
+
+        context.beginPath();
+        drawStar(context, outerRadianAngle, innerRadianAngle, angleRadian, radius, x_pos, y_pos);
+
+        //Close star if edges are not even (only for stroke)
+        var xOutside;
+        var yOutside;
+        if (edgeCount % 2 !== 0) {
+            xOutside = x_pos + Math.cos(outerRadianAngle) * radius;
+            yOutside = y_pos + Math.sin(outerRadianAngle) * radius;
+            context.lineTo(xOutside, yOutside);
+
+        }
+        context.lineWidth = 1;
+        context.stroke();
+
+    }
+
+
+    function fillStar(radius, edgeCount, fillColor, x_pos, y_pos, context) {
+
+        // Flexible radius and or amount of edges, size not checked for plausibility
+
+        /*
+        since this function is also used multiple times by drawStars (which draws a lot of stars)
+        we should not reset the canvas here.
+        Instead, we only reset the canvas, if not context parameter was passed.
+        Note, a "var" is not necessary as the parameter implicitly is declared as variable.
+        */
+        if (context === undefined) {
+            context = resetCanvas();
+        }
+
+        var degreeAngle = 360 / edgeCount,
+                radianAngle = degreeAngle * Math.PI / 180,
+                outerRadianAngle = 0,
+                innerRadianAngle = radianAngle / 2; //shift angle
+
+        context.beginPath();
+        drawStar(context, outerRadianAngle, innerRadianAngle, radianAngle, radius, x_pos, y_pos);
+        context.fillStyle = fillColor;
+        context.fill();
+        context.closePath();
+    }
+
+
+    // Draw multiple stars, takes max radius (min= 30px) and max edges (min = 4)
+    function drawStars(maxRadius, maxEdges) {
+        var context = resetCanvas();
+        var x_pos, y_pos, edgeCount, fillColor, radius;
+        const starCount = 80;
+
+        for (var i = 0; i < starCount; i++) {
+
+            radius = randomise(30, maxRadius);
+            x_pos = randomise(0, 600);
+            y_pos = randomise(0, 600);
+            edgeCount = randomise(4, maxEdges);
+
+            fillColor = getRandomColorAsHex();
+
+            fillStar(radius, edgeCount, fillColor, x_pos, y_pos, context);
+        }
+    }
+
+
+    function drawDiamond() {
+
+        // Uses a set of predefined non flexible coordinates
+        var context = resetCanvas(),
+
+                commandsAndCoordinates = [["move", 250, 200], ["draw", 380, 200], ["draw", 400, 230], ["draw", 315, 300],
+                    ["draw", 225, 230], ["draw", 250, 230], ["draw", 400, 230], ["move", 225, 230],
+                    ["draw", 250, 200], ["draw", 270, 230], ["draw", 315, 200], ["draw", 360, 230],
+                    ["draw", 380, 200], ["move", 360, 230], ["draw", 315, 300], ["draw", 270, 230],
+                    ["move", 315, 300], ["draw", 315, 200]];
+
+
+        commandsAndCoordinates.forEach(function (value) {
+            if (value[0] == "move")
+                context.moveTo(value[1], value[2]);
+            else
+                context.lineTo(value[1], value[2]);
+        });
+
+        context.lineWidth = 2;
+        context.stroke();
+    }
+
+    function drawHeart() {
+
+        // Uses a set of predefined non flexible coordinates
+        var context = resetCanvas(),
+                coordinates = [[125, 200], [165, 50, 300, 150], [430, 50, 475, 200],
+                    [505, 345, 300, 440], [85, 345, 125, 200]];
+
+        // #PETER: Better use
+        // for (value in array) {
+        coordinates.forEach(function (value) {
+            if (value.length == 2)
+                context.moveTo(value[0], value[1]);
+            else
+                context.quadraticCurveTo(value[0], value[1], value[2], value[3]);
+        });
+        context.fillStyle = "#f2352f"; // pretty red.
+        context.fill();
+    }
+
+    function drawQuestionMark() {
+
+        var context = resetCanvas();
+        context.moveTo(275, 200);
+        context.bezierCurveTo(275, 150, 350, 150, 350, 200);
+        context.bezierCurveTo(340, 260, 310, 190, 305, 270);
+        context.lineWidth = 20;
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(305, 275);
+        context.lineTo(305, 290);
+        context.stroke();
+
+    }
+
+
+    function randomise(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    /**
+     * shorthand to create a random color.
+     * possible origin: http://stackoverflow.com/a/25821830/1447479
+     * @returns {string} in format #[0-f](6)
+     */
+    function getRandomColorAsHex() {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
+    /**
+     * resets the canvas with id "canvas".
+     * @returns {CanvasRenderingContext2D}
+     */
+    function resetCanvas() {
+        var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d");
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.beginPath();
+        return context;
+    }
+    // let's try and avoid situations where the canvas is not ready.
+    // this is an equivalent to jQuery(document).ready()... http://stackoverflow.com/a/800010/1447479
+    document.addEventListener("DOMContentLoaded", resetCanvas);
+
+</script>
+</body>
+</html>

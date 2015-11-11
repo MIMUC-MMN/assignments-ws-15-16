@@ -1,0 +1,2 @@
+Create a memory game (with characters and numbers or pictures) using php sessions.
+Make the game look nice using javascript and CSS3 aniamtions and reload the page using ajax.
