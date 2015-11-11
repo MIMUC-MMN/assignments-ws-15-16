@@ -9,9 +9,9 @@
 <body>
     <nav>
         <button id="heart" onclick="drawHeart()">Heart</button>
-        <button id="star" onclick="strokeStar(80, 6, 300, 300)">Star</button>
-        <button id="star" onclick="fillStar(100, 15,'#206eb2', 300, 300)">Filled Star</button>
-        <button id="star" onclick="drawStars(100, 28)">Radnom Stars</button>
+        <button id="strokeStar" onclick="strokeStar(80, 6, 300, 300)">Star</button>
+        <button id="fillStar" onclick="fillStar(100, 15,'#206eb2', 300, 300)">Filled Star</button>
+        <button id="randomStars" onclick="drawStars(100, 28)">Radnom Stars</button>
         <button id="diamond" onclick="drawDiamond()">Diamond</button>
         <button id="question" onclick="drawQuestionmark()">Questionmark</button>
     </nav>
@@ -20,63 +20,66 @@
     </canvas>
 
 <script>
-    
-// #PETER: Your code uses both german and english comments. It would be good to stick to one language for consistency.
-// The same is true for your variables. You have a 'drawStar' function that takes a context and 'radWinkelAußen'? You should
-// try to stick to english for variable, parameter and function names.
-    
-function drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos){
-    // #PETER: It's not considered good style to modify function parameters. You can store them in a new variable and
-    // modify the new variable afterwards. E.g.:
-    // var radiusOutTemp = radWinkelAußen;
-    // while(radiusOutTemp <= 2*Math.PI) {
-    //     ...
-    //     radiusOutTemp += radWinkel;
-    // }
-    
-    while(radWinkelAußen <= 2*Math.PI){
-        
-        x_aussen = x_pos + Math.cos(radWinkelAußen) * radius;  
-        y_aussen = y_pos + Math.sin(radWinkelAußen) * radius;
-        
-        x_innen = x_pos + Math.cos(radWinkelInnen) * radius/2;  
-        y_innen = y_pos + Math.sin(radWinkelInnen) * radius/2;
 
-        radWinkelAußen += radWinkel;
-        radWinkelInnen += radWinkel;
-        context.lineTo(x_aussen, y_aussen);
-        context.lineTo(x_innen, y_innen);
+
+
+    /*
+
+    #TOBI_S TODO this code needs some more explanatory comments of what's going on in the drawing functions.
+
+     */
+
+
+function drawStar(context, outerRadianAngle, innerRadianAngle, radianAngle, radius, x_pos, y_pos){
+    var xOutside, yOutside, xInside, yInside;
+
+
+    //#TOBI_S TODO this is not self explanatory. Please clarify what's going on here. What's the main idea behind it?
+    while (outerRadianAngle <= 2 * Math.PI) {
+
+        xOutside = x_pos + Math.cos(outerRadianAngle) * radius;
+        yOutside = y_pos + Math.sin(outerRadianAngle) * radius;
+
+        xInside = x_pos + Math.cos(innerRadianAngle) * radius / 2;
+        yInside = y_pos + Math.sin(innerRadianAngle) * radius / 2;
+
+        outerRadianAngle += radianAngle;
+        innerRadianAngle += radianAngle;
+        context.lineTo(xOutside, yOutside);
+        context.lineTo(xInside, yInside);
     }
 }
 
-function strokeStar(radius, zacken, x_pos, y_pos){
+function strokeStar(radius, edgeCount, x_pos, y_pos){
     
      // Flexible radius and or amount of edges, size not checked for plausability
     
     var context = prepareCanvas(),
-        gradWinkel = 360/zacken,
-        radWinkel = gradWinkel*Math.PI/180,
-        radWinkelAußen = 0, 
-        radWinkelInnen = radWinkel/2; //Winkel verschieben 
+        angleDegree = 360/edgeCount,
+        angleRadian = angleDegree*Math.PI/180,
+        outerRadianAngle = 0,
+        innerRadianAngle = angleRadian/2; //shift angle
 
     context.beginPath();
-    drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos);
+    drawStar(context, outerRadianAngle, innerRadianAngle, angleRadian, radius, x_pos, y_pos);
     
     //Close star if edges are not even (only for stroke)
-    if(zacken % 2 !==0){
-        x_aussen = x_pos + Math.cos(radWinkelAußen) * radius;  
-        y_aussen = y_pos + Math.sin(radWinkelAußen) * radius;
-        context.lineTo(x_aussen, y_aussen);
-    
+    var xOutside;
+    var yOutside;
+    if (edgeCount % 2 !== 0) {
+        xOutside = x_pos + Math.cos(outerRadianAngle) * radius;
+        yOutside = y_pos + Math.sin(outerRadianAngle) * radius;
+        context.lineTo(xOutside, yOutside);
+
     }    
     context.lineWidth=1;
     context.stroke();
     
 }
             
-function fillStar(radius, zacken, farbe, x_pos, y_pos, context){
+function fillStar(radius, edgeCount, fillColor, x_pos, y_pos, context){
     
-    // Flexible radius and or amount of edges, size not checked for plausability
+    // Flexible radius and or amount of edges, size not checked for plausibility
     
     // Must canvas be initialised?
     if(!context){
@@ -85,33 +88,34 @@ function fillStar(radius, zacken, farbe, x_pos, y_pos, context){
         var context = prepareCanvas();
     }
     
-    var gradWinkel = 360/zacken,
-        radWinkel = gradWinkel*Math.PI/180,
-        radWinkelAußen = 0, 
-        radWinkelInnen = radWinkel/2; //Winkel verschieben 
+    var degreeAngle = 360/edgeCount,
+        radianAngle = degreeAngle*Math.PI/180,
+        outerRadianAngle = 0,
+        innerRadianAngle = radianAngle/2; //shift angle
 
     context.beginPath();
-    drawStar(context, radWinkelAußen, radWinkelInnen, radWinkel, radius, x_pos, y_pos);
-    context.fillStyle = farbe;
+    drawStar(context, outerRadianAngle, innerRadianAngle, radianAngle, radius, x_pos, y_pos);
+    context.fillStyle = fillColor;
     context.fill();
     context.closePath();
 }
 
 
 // Draw multiple stars, takes max radius (min= 30px) and max edges (min = 4)     
-function drawStars(maxRadius, maxZacken){
+function drawStars(maxRadius, maxEdges){
     var context = prepareCanvas();
-    
-    for(i=0; i<80; i++){
-        
-        radius = randomise(30,maxRadius);
-        x_pos = randomise(0,600);
-        y_pos = randomise(0,600);
-        zacken = randomise(4,maxZacken);
 
-        farbe =  '#'+Math.floor(Math.random()*16777215).toString(16);
-        
-        fillStar(radius, zacken, farbe, x_pos, y_pos, context);
+    var x_pos, y_pos, edgeCount, fillColor;
+    for (var i = 0; i < 80; i++) {
+
+        radius = randomise(30, maxRadius);
+        x_pos = randomise(0, 600);
+        y_pos = randomise(0, 600);
+        edgeCount = randomise(4, maxEdges);
+
+        fillColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+        fillStar(radius, edgeCount, fillColor, x_pos, y_pos, context);
     }
 }    
         
@@ -119,7 +123,7 @@ function drawStars(maxRadius, maxZacken){
 
 function drawDiamond(){
    
-    // Uses a set of predefinded non flexible coordinates 
+    // Uses a set of predefined non flexible coordinates
     var context = prepareCanvas(),
         
          array = [["move",250,200], ["draw",380,200], ["draw",400,230], ["draw",315,300],       
@@ -145,20 +149,21 @@ function drawDiamond(){
     
 function drawHeart(){
     
-    // Uses a set of predefinded non flexible coordinates 
+    // Uses a set of predefined non flexible coordinates
     var context = prepareCanvas(), 
         array = [[125,200], [165, 50,300, 150], [430, 50,475, 200], 
                  [505, 345,300, 440], [85, 345,125, 200]]
     
     // #PETER: Better use
     // for (value in array) {
+
     for(value of array){
         if(value.length == 2)
             context.moveTo(value[0],value[1]);
         else
             context.quadraticCurveTo(value[0], value[1],value[2], value[3]);
     }
-    context.fillStyle = "#f2352f";
+    context.fillStyle = "#f2352f"; // pretty red.
     context.fill();
 }    
     
@@ -182,7 +187,20 @@ function drawQuestionmark(){
 function randomise(min, max) {
     return Math.random() * (max - min) + min;
 }
-    
+
+/**
+ * shorthand to create a random color.
+ * possible origin: http://stackoverflow.com/a/25821830/1447479
+ * @returns {string} in format #[0-f](6)
+ */
+function getRandomColorAsHex(){
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+}
+
+/**
+ * resets the canvas with id "canvas".
+ * @returns {CanvasRenderingContext2D}
+ */
 function prepareCanvas(){
     var canvas = document.getElementById("canvas"),
         context = canvas.getContext("2d");
@@ -191,7 +209,10 @@ function prepareCanvas(){
     context.beginPath();
     return context;
 }
-    
+    // let's try and avoid situations where the canvas is not ready.
+    // this is an equivalent to jQuery(document).ready()... http://stackoverflow.com/a/800010/1447479
+    document.addEventListener("DOMContentLoaded", prepareCanvas);
+
 </script>
 </body>
 </html>
