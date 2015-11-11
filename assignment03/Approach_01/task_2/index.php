@@ -6,8 +6,15 @@ session_start();
 ## Include functions
 require_once('functions.inc');
 
-## Define Globals
+## Define Variables
 $possibleCharsArr = array("A", "B", "C", "D","E","F","G");
+$guessesArray =array(); // Init array fixing notice if index $i is not set
+$trialsOutput = NULL;
+$statusOutput = NULL;
+$codeOutput = NULL;
+$errorMsg = NULL;
+$errorMsgOutput = NULL;
+$rows = NULL;
 
 ## If no session exists init game
 if(!isset($_SESSION['counter']) || isset($_GET['restart'])) {
@@ -20,6 +27,7 @@ if(!isset($_SESSION['counter']) || isset($_GET['restart'])) {
     ## Initialise new session
     $_SESSION['counter'] = 0; // Init session counter
     $_SESSION['gameOver'] = false; // Init game finished property
+    $_SESSION['guessedArray'] = array(); // Init guesses 
    
     ## Create pseudo random code and store in session
     $_SESSION['code'] = $searchedCodeArr = createCode($possibleCharsArr);
@@ -34,19 +42,18 @@ if(!isset($_SESSION['counter']) || isset($_GET['restart'])) {
 else{
     
     ## Prepare variables
-    $lettersArray = $_POST['letter'];
     $searchedCodeArr = $_SESSION['code'];
     $code = implode(" ", $searchedCodeArr); // As string
     $counter = $_SESSION['counter'];
     $guessesArray = $_SESSION['guessedArray'];    
     
-    ##!!!! Remove
-    //print_r($searchedCodeArr);
-
-    
     ## Proces input (on post request)...
     if(isset($_POST['letter'])){
-                
+        
+        // Read $_POST SUPERGLOBAL
+        $lettersArray = $_POST['letter'];
+
+        
         ## ... and if game not finished (seperated to output meaningful error messages)
         if(!$_SESSION['gameOver']){
             
@@ -78,6 +85,10 @@ else{
                         $errorMsg = "multipleLetters";
                         }
                     }
+                    ## If letter is not part of searched code
+                    else
+                        $guessesArray[$counter]['color'][$key] = ""; // Else display black color
+
                 }
                 ## If any letter is not A-G
                 else{
@@ -154,8 +165,19 @@ if(isset($errorMsg))
 for($i=0; $i<10; $i++){  // Draw ten rows - (could simply made "dynamic using $counter property)
     $rowTemp = $rowTemplate; // Prevent file reload (improve performance)
     for($n=0; $n<4; $n++){ // Each rows has four digits
-        $rowTemp = str_replace("{letter$n}", $guessesArray[$i]['letter'][$n], $rowTemp);    // Insert digits
-        $rowTemp = str_replace("{color$n}", $guessesArray[$i]['color'][$n], $rowTemp);  // Manipulate color
+        
+        // Prevent undefined offset notice
+        if(array_key_exists($i, $guessesArray)){
+            $enteredChar = $guessesArray[$i]['letter'][$n];
+            $outputColor = $guessesArray[$i]['color'][$n];
+        }
+        else{
+            $enteredChar = "";
+            $outputColor = "";
+        }
+        
+        $rowTemp = str_replace("{letter$n}", $enteredChar, $rowTemp);    // Insert digits
+        $rowTemp = str_replace("{color$n}", $outputColor, $rowTemp);  // Manipulate color
     }
     $rows .= $rowTemp; // Collect all rows to output them together
 }
