@@ -75,10 +75,10 @@ class DBHandler{
     }
 
     function getNotesForUser($userId){
-        if(!isset($username)){
-            $username = $_SESSION['userName'];
+        if(!isset($userId)){
             $userId = $_SESSION['userId'];
         }
+        if(!isset($userId)) return array();
 
         $queryString = "SELECT id, title, content FROM notes WHERE `user`=?";
         $statement = $this->connection->prepare($queryString);
