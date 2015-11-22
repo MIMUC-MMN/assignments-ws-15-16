@@ -55,13 +55,14 @@ class DBHandler{
         $this->connection->query($queryString);
     }
 
-    function insertNote($title,$content,$username){
+    function insertNote($title, $content, $userid){
         assert($this->connection);
         if(strlen($content)>0){
             $queryString = "INSERT INTO notes (`title`,`content`,`user`) VALUES(?,?,?)";
             $statement = $this->connection->prepare($queryString);
-            $statement->bind_param("sss",$title,$content,$username);
-            return $statement->execute();
+            $statement->bind_param("ssi",$title,$content,$userid);
+            $statement->execute();
+            return $this->connection->insert_id;
         }
         else{
             return false;
