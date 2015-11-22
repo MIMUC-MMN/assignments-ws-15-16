@@ -12,7 +12,7 @@ $authHandler = new AuthHandler($dbHandler);
 <head lang="en">
     <meta charset="UTF-8">
     <title>Registration for Note Taking App</title>
-    <link rel="stylesheet" href="notes.css" />
+    <link rel="stylesheet" href="css/notes.css" />
 </head>
 <body>
 
