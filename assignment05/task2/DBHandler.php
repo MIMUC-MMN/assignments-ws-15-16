@@ -69,11 +69,12 @@ class DBHandler{
         }
     }
 
-    function deleteNotes($noteIdArray){
+    function deleteNote($noteId){
         assert($this->connection);
-        $param = implode(',',$noteIdArray);
-        $queryString = "DELETE FROM notes WHERE `id` IN (".$param.")";
-        return $this->connection->query($queryString);
+        $queryString = "DELETE FROM notes WHERE `id` = ?";
+        $statement = $this->connection->prepare($queryString);
+        $statement->bind_param("i", $noteId);
+        return $statement->execute();
     }
 
     function getNotesForUser($userId){
