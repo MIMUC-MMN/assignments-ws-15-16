@@ -50,7 +50,8 @@ class DBHandler{
         // TODO
         assert($this->connection);
         $queryString =  "CREATE TABLE IF NOT EXISTS notes (id INT(5) PRIMARY KEY AUTO_INCREMENT, ".
-            "title VARCHAR(255), content TEXT(255) NOT NULL, user INT(5))";
+            "title VARCHAR(255), content TEXT(255) NOT NULL, user INT(5) NOT NULL,".
+            "FOREIGN KEY fk_user(user) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE)";
         $this->connection->query($queryString);
     }
 
