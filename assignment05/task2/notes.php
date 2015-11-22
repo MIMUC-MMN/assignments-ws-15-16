@@ -11,7 +11,8 @@ $authHandler = new AuthHandler($dbHandler);
 <head lang="en">
     <meta charset="UTF-8">
     <title>User Notes</title>
-    <link rel="stylesheet" href="notes.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/notes.css"/>
 </head>
 <body>
 
