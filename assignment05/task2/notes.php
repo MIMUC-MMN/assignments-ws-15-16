@@ -53,7 +53,7 @@ $authHandler = new AuthHandler($dbHandler);
 <div id="container">
 
     <section class="input">
-        <?php include_once('note.form.inc.php'); ?>
+        <?php include_once('./includes/note.form.inc.php'); ?>
     </section>
 
 
@@ -74,7 +74,7 @@ $authHandler = new AuthHandler($dbHandler);
     <?php else: ?>
     </header>
     <div id="container">
-    <?php include_once('login.form.inc.php'); ?>
+    <?php include_once('./includes/login.form.inc.php'); ?>
     <div><a href="registration.php">Register</a></div>
     </div>
     <?php endif; ?>
