@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
                     // forwards the user to the notes page.
                     echo "<script>
                             setTimeout(function(){
-                                window.location.href='notes.php';
+                                window.location.href='/';
                             },2000);
                         </script>";
                 };
