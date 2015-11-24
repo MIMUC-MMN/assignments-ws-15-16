@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once('DBHandler.php');
-require_once('AuthHandler.php');
-require_once('connectionInfo.private.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'AuthHandler.php');
+require_once(APP_ROOT . DS . 'config' . DS . 'connectionInfo.private.php');
 $dbHandler = new DBHandler($host, $user, $password, $db);
 $authHandler = new AuthHandler($dbHandler);
 

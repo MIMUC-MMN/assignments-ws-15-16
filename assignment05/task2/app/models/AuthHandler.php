@@ -1,5 +1,5 @@
 <?php
-require_once('DBHandler.php');
+require_once(APP_ROOT . DS . 'models' . DS .'DBHandler.php');
 define('authSessionKey','isAuthenticated');
 
 class AuthHandler{
@@ -20,12 +20,12 @@ class AuthHandler{
     }
 
     function loginUser($userName,$password){
-        $userInfo = $this->dbHandler->queryUserByUserName($userName);
-        $passwordVerificationResult = password_verify($password,$userInfo['hash']);
+        $user = $this->dbHandler->queryUserByUserName($userName);
+        $passwordVerificationResult = password_verify($password,$user->getHash());
         if($passwordVerificationResult){
             $_SESSION[authSessionKey] = true;
-            $_SESSION['userName'] = $userInfo['name'];
-            $_SESSION['userId'] = $userInfo['id'];
+            $_SESSION['userName'] = $user->getName();
+            $_SESSION['userId'] = $user->getId();
             return true;
         }
         else return false;

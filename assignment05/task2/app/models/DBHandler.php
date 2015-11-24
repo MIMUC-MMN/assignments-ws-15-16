@@ -1,6 +1,7 @@
 <?php
 
-require_once('Note.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'Note.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'User.php');
 
 class DBHandler{
     var $connection;
@@ -43,7 +44,7 @@ class DBHandler{
         $statement->execute();
         $statement->bind_result($id,$name,$hash);
         $statement->fetch();
-        return array("id"=>$id,"name"=>$name,"hash"=>$hash);
+        return new User($id, $name, $hash);
     }
 
     function ensureNotesTable(){

@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once('DBHandler.php');
-require_once('connectionInfo.private.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
+require_once(APP_ROOT . DS . 'config' . DS . 'connectionInfo.private.php');
 $dbHandler = new DBHandler($host, $user, $password, $db);
 
 if($dbHandler->deleteNote($_POST['note-id'])) {

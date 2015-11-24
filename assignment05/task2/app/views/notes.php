@@ -60,12 +60,13 @@ $authHandler = new AuthHandler($dbHandler);
     <div class="clear"></div>
     <section class="notes">
         <div class="flexParent">
+            <?php /** @var $notes Note[] */?>
             <?php $notes = $dbHandler->getNotesForUser($authHandler->getUserId()); ?>
             <?php foreach ($notes as $note): ?>
-                <div id="note-<?= $note->id ?>" class="note flexChild">
+                <div id="note-<?= $note->getId() ?>" class="note flexChild">
                     <i class="delete fa fa-trash fa-lg"></i>
-                    <div class="title"><?= $note->title ?></div>
-                    <div class="content"><?= $note->content ?></div>
+                    <div class="title"><?= $note->getTitle() ?></div>
+                    <div class="content"><?= $note->getContent() ?></div>
                 </div>
             <?php endforeach; ?>
             <div class='clear'></div>
