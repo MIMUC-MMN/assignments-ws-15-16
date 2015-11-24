@@ -1,12 +1,15 @@
 <?php
 
-class Note{
-    var $id;
-    var $title;
-    var $content;
-    function __construct($id=-1,$title,$content){
-        $this->id=$id;
-        $this->title=$title;
-        $this->content=$content;
+class Note
+{
+    protected $id;
+    protected $title;
+    protected $content;
+
+    function __construct($id, $title, $content)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
     }
 }
