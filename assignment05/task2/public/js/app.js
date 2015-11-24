@@ -73,7 +73,7 @@ var Notes = (function ($) {
             .always(function () {
                 $('header').find('.notification').remove();
             })
-            .done(function (data, status) {
+            .done(function (data) {
 
                 // the API echoes back our sent data, here only the deleted ID
                 var note = data.deleted;
