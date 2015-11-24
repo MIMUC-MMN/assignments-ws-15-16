@@ -29,7 +29,7 @@ var Notes = (function ($) {
      * @param data the JSON-data representing the note
      */
     methods.createNote = function createNote(data) {
-        $.post('./createNote.php', data)
+        $.post('app/controllers/api/createNote.php', data)
             .always(function () {
                 $('header').find('.notification').remove();
             })
@@ -69,7 +69,7 @@ var Notes = (function ($) {
      * @param data the ID of the note pending deletion, in JSON
      */
     methods.deleteNote = function deleteNote(data) {
-        $.post('./deleteNote.php', data)
+        $.post('app/controllers/api/deleteNote.php', data)
             .always(function () {
                 $('header').find('.notification').remove();
             })

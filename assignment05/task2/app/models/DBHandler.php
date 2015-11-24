@@ -1,7 +1,11 @@
 <?php
 
-require_once(APP_ROOT . DS . 'models' . DS . 'Note.php');
-require_once(APP_ROOT . DS . 'models' . DS . 'User.php');
+use views\helpers\PathHelper;
+require_once(dirname(dirname(__FILE__)) . '/views/helpers/PathHelper.php');
+$path = new PathHelper();
+
+require_once($path->getModelPath() . 'Note.php');
+require_once($path->getModelPath() . 'User.php');
 
 class DBHandler{
     var $connection;

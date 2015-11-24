@@ -1,8 +1,15 @@
 <?php
 session_start();
-require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
-require_once(APP_ROOT . DS . 'models' . DS . 'AuthHandler.php');
-require_once(APP_ROOT . DS . 'models' . DS . 'connectionInfo.private.php');
+
+use views\helpers\PathHelper;
+
+require_once(dirname(__FILE__) . '/app/views/helpers/PathHelper.php');
+$path = new PathHelper();
+
+require_once($path->getModelPath() . 'DBHandler.php');
+require_once($path->getModelPath() . 'AuthHandler.php');
+require_once($path->getConfigPath() . 'connectionInfo.private.php');
+
 $dbHandler = new DBHandler($host,$user,$password,$db);
 $authHandler = new AuthHandler($dbHandler);
 ?>
@@ -12,8 +19,8 @@ $authHandler = new AuthHandler($dbHandler);
 <head lang="en">
     <meta charset="UTF-8">
     <title>Registration for Note Taking App</title>
-    <link rel="shortcut icon" type="image/x-icon" href="<?= ASSETS_PATH ?>/favicon.ico">
-    <link rel="stylesheet" href="<?= ASSETS_PATH?>/css/notes.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="<?= $path->getAssetPath() ?>/favicon.ico">
+    <link rel="stylesheet" href="<?= $path->getAssetPath() ?>/css/notes.css" />
 </head>
 <body>
 
@@ -32,7 +39,7 @@ if(isset($_POST['submit'])){
                     // forwards the user to the notes page.
                     echo "<script>
                             setTimeout(function(){
-                                window.location.href='./notes.php';
+                                window.location.href='notes.php';
                             },2000);
                         </script>";
                 };

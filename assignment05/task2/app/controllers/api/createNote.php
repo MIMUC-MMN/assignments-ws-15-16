@@ -1,8 +1,14 @@
 <?php
 session_start();
-require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
-require_once(APP_ROOT . DS . 'models' . DS . 'AuthHandler.php');
-require_once(APP_ROOT . DS . 'config' . DS . 'connectionInfo.private.php');
+
+use views\helpers\PathHelper;
+require_once(dirname(dirname(dirname(__FILE__))) . '/views/helpers/PathHelper.php');
+$path = new PathHelper();
+
+require_once($path->getModelPath() . 'DBHandler.php');
+require_once($path->getModelPath() . 'AuthHandler.php');
+require_once($path->getConfigPath() . 'connectionInfo.private.php');
+
 $dbHandler = new DBHandler($host, $user, $password, $db);
 $authHandler = new AuthHandler($dbHandler);
 

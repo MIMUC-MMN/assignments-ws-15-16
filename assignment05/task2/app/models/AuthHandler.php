@@ -1,6 +1,13 @@
 <?php
-require_once(APP_ROOT . DS . 'models' . DS .'DBHandler.php');
+
 define('authSessionKey','isAuthenticated');
+
+use views\helpers\PathHelper;
+
+require_once(dirname(dirname(__FILE__)) . '/views/helpers/PathHelper.php');
+$path = new PathHelper();
+
+require_once($path->getModelPath() . 'DBHandler.php');
 
 class AuthHandler{
 
