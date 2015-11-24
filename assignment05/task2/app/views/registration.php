@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once('DBHandler.php');
-require_once('AuthHandler.php');
-require_once('connectionInfo.private.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'AuthHandler.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'connectionInfo.private.php');
 $dbHandler = new DBHandler($host,$user,$password,$db);
 $authHandler = new AuthHandler($dbHandler);
 ?>
@@ -12,7 +12,8 @@ $authHandler = new AuthHandler($dbHandler);
 <head lang="en">
     <meta charset="UTF-8">
     <title>Registration for Note Taking App</title>
-    <link rel="stylesheet" href="css/notes.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="<?= ASSETS_PATH ?>/favicon.ico">
+    <link rel="stylesheet" href="<?= ASSETS_PATH?>/css/notes.css" />
 </head>
 <body>
 

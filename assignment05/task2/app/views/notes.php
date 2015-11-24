@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once('DBHandler.php');
-require_once('AuthHandler.php');
-require_once('connectionInfo.private.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'DBHandler.php');
+require_once(APP_ROOT . DS . 'models' . DS . 'AuthHandler.php');
+require_once(APP_ROOT . DS . 'config' . DS . 'connectionInfo.private.php');
 $dbHandler = new DBHandler($host, $user, $password, $db);
 $authHandler = new AuthHandler($dbHandler);
 ?>
@@ -11,9 +11,9 @@ $authHandler = new AuthHandler($dbHandler);
 <head lang="en">
     <meta charset="UTF-8">
     <title>User Notes</title>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="<?= ASSETS_PATH ?>/favicon.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/notes.css"/>
+    <link rel="stylesheet" href="<?= ASSETS_PATH ?>/css/notes.css"/>
 </head>
 <body>
 
@@ -53,7 +53,7 @@ $authHandler = new AuthHandler($dbHandler);
 <div id="container">
 
     <section class="input">
-        <?php include_once('./includes/note.form.inc.php'); ?>
+        <?php include_once(APP_ROOT . DS . 'views' . DS . 'partials' . DS . 'note.form.inc.php'); ?>
     </section>
 
 
@@ -74,12 +74,12 @@ $authHandler = new AuthHandler($dbHandler);
     <?php else: ?>
     </header>
     <div id="container">
-    <?php include_once('./includes/login.form.inc.php'); ?>
+    <?php include_once(APP_ROOT . DS . 'views' . DS . 'partials' . DS .'login.form.inc.php'); ?>
     <div><a href="registration.php">Register</a></div>
     </div>
     <?php endif; ?>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="js/app.js"></script>
+<script src="<?= ASSETS_PATH ?>/js/app.js"></script>
 </body>
 </html>
