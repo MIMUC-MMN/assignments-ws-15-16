@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 router.use('/spotify', spotify);
 
-/* GET home page. */
+/* GET ShowVisits page. */
 router.get('/showVisits', function(req, res, next) {
 	var counter = req.app.locals.counter;
 	res.send(counter.getCount());
