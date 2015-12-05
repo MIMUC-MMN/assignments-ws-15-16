@@ -7,8 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-var VisitCounter = require('./customModules/visitCounter');
-var counter = new VisitCounter();
+var counter = require('./customModules/visitCounter');
 
 var app = express();
 
@@ -31,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/showVisits', function (req, res) {
-   res.json(VisitCounter.getCount());
+   res.json(counter.getCount());
 });
 
 // catch 404 and forward to error handler

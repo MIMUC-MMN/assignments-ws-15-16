@@ -71,4 +71,4 @@ var visitCounter = function(countedPaths){
 };
 
 // make the module available to other modules:
-module.exports = visitCounter;
+module.exports = new visitCounter();
