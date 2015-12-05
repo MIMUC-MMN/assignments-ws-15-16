@@ -30,6 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/showVisits', function (req, res) {
+   res.json(VisitCounter.getCount());
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
