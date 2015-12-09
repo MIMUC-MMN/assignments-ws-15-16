@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Advanced AJAX with jQuery
+    </title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // collect all unmutable API constants here
+            const apiConstants = {
+                spotifySearchURL: 'https://api.spotify.com/v1/search'
+            };
+
+            /**
+             * This is a wrapper for the Spotify API
+             * @constructor
+             */
+            function SpotifySearcher() {
+                /**
+                 * a private factory function that returns the parameters that the API requires.
+                 * @param searchTerm String search query
+                 * @param type String one of 'artist', 'album', 'playlist' or 'track' (or a comma-separated List as String)
+                 * @returns {{q: String, type: String}}
+                 */
+                const parameterGenerator = function (searchTerm, type) {
+                    return {
+                        q: searchTerm,
+                        type: type
+                    }
+                };
+
+                /**
+                 * Main method to use the Spotify search API.
+                 * The parameters are automatically generated.
+                 * Also the result of the AJAX request is processed.
+                 * The callback function will be called with an array of items.
+                 * @param term String the search term (query)
+                 * @param type String the type of the search: one of 'artist', 'album', 'playlist' or 'track'
+                 * @param callback {function(items:Array)}
+                 */
+                this.search = function (term, type, callback) {
+                    const searchParams = parameterGenerator(term, type);
+                    var deferred = $.get(apiConstants.spotifySearchURL, searchParams);
+                    deferred.done(function (data) {
+
+                        // the data object tells us which type of query was started
+                        // then we can callback with its items
+                        if (data.artists) {
+                            callback(data.artists.items)
+                        }
+                        else if (data.albums) {
+                            callback(data.albums.items)
+                        }
+                        else if (data.tracks) {
+                            callback(data.tracks.items)
+                        }
+                        else if (data.playlists) {
+                            callback(data.playlists.items)
+                        }
+                        // something weird happened
+                        // prevent errors by calling back with an empty array.
+                        else {
+                            callback([]);
+                        }
+                    });
+                };
+            }
+
+            // this object will be used all the time.
+            const searcher = new SpotifySearcher();
+
+            /**
+             * this function takes care of inserting the items into the document (into the #result div)
+             * @param items Array {{images: Array, external_urls: {spotify:String}, name: String}
+             */
+            const uiHandler = function(items) {
+                // a re-usable handle of the target container
+                // result is a .flexParent. Its child nodes will spread automatically
+                const targetDiv = $('#result');
+
+                var showNoResult = function(message){
+                    // clear the contents of the result div
+                    // and append a message
+                    targetDiv.empty()
+                            .append($('<div class="item flexChild">').html(
+                                    message || "We are sorry, the search returned no results."
+                            ).fadeIn());
+                };
+
+                // flush it to start fresh.
+                targetDiv.empty();
+
+                // make sure that it's an array and it contains items.
+                if (items.length) {
+
+                    // loop through each item to construct the DOM node <div class="item"><image/><span/></div>
+                    items.forEach(function (item) {
+                        // construct the container for the data.
+                        // .flexChild makes the items spread automatically and use all space necessary and available.
+                        // only available in CSS3 compatible browsers.
+                        const container = $('<div class="item flexChild">');
+
+                        // the name property will most likely be returned, so we don't sanity-check that.
+                        const name = $('<span class="itemName">' + item.name + '</span>');
+
+                        // image to display with the item, e.g. an album cover.
+                        // expected content: jQuery object
+                        var image;
+
+                        // often, the returned items do not have images to display with them
+                        // this checks if this is the case.
+                        if (item.images && item.images.length > 0) {
+                            // construct a DOM node / jQuery Object with.
+                            // the images array is sorted by size. The first entry is the largest image, the last
+                            // is the smalles. Currently, we use the smallest at the index item.images.length - 1
+                            image = $('<image src="' + item.images[item.images.length - 1].url + '" class="itemImage" />');
+                            // do not forget to append the image to the .item container.
+                            container.append(image);
+                        }
+
+                        // check if there is a link to the spotify player.
+                        // if so, attach a click handler and the .clickable class (cursor: pointer, box shadow)
+                        if(item.external_urls && item.external_urls.spotify){
+                            container.addClass('clickable').click(function(){
+                                window.open(item.external_urls.spotify);
+                            })
+                        }
+
+
+                        // put the name DOM node into the .item node.
+                        container.append(name);
+
+                        // crucial point: append .item to the target container (#result)
+                        targetDiv.append(container);
+
+                        // to show off a little bit, .item has a display:none property by default
+                        // most modern computers will be able to fade them all at once at the same time.
+                        // to create the illusion that the are loaded one after the other,
+                        // we randomize the duration of the animation (between 0 and 1000ms)
+                        container.fadeIn(Math.random()*1000);
+                    })
+                }
+                else{ // we don't have any items, give some feedback.
+                    showNoResult();
+                }
+            };
+
+
+            // ########################################################################################################
+            //
+            // Off to the UI and Events
+            //
+            // ########################################################################################################
+
+            // grab a handle to the controls container
+            const controls = $('#controls');
+
+            /**
+             * utility function that can be used in all event handlers that react to changes to either the
+             * input value of the search-box or the radio buttons
+             * Has a dependency on uiHandler, which could be resolved by moving the entire uiHandler inside this scope.
+             * @param inputValue String search term to be passed to the SpotifySearcher
+             * @param type String they search type, see .search() documentation.
+             */
+            const searchOrClear = function(inputValue,type){
+                // make sure that there is something in the field and start the search only then.
+                if(inputValue && type){
+                    searcher.search(inputValue, type, uiHandler);
+                }
+                // this can happen if the search box is reset with the backspace or delete key.
+                // what we want to then: clean up the result section
+                else{
+                    $('#result').empty();
+                }
+            };
+
+            // attach an event handler to the search box.
+            // we listen to the input event, which is also capable of detecting if the user clicks on the little
+            // "x" in the search box.
+            // .find() is more efficient than '#controls input[type...]'
+            controls.find('input[type=search]').on('input', function (e) {
+                // search the controls element for the currently checked radio button and store its value
+                // this is necessary to tell the SpotifySearcher which kind of search to perform.
+                const type = controls.find('input[type=radio]:checked').val();
+
+                // to hold: the current value of the input field (this).
+                var inputValue;
+
+                // We do not want to trigger new searches, when hitting meta and modifier keys
+                // for example the shift key
+                // I'm using this solution by user Daniel
+                // http://stackoverflow.com/a/20206238/1447479
+                if (e.which !== 0 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    // now we know that an actual letter key was pressed
+                    // and can retrieve the input field's value.
+                    inputValue = $(this).val();
+
+                    // inputValue and type are sorted out, now do the search or clear the results
+                    searchOrClear(inputValue,type);
+                }
+            });
+
+            // another event handler. We want to get notified if the user chooses a different seach category
+            // and automatically refresh the search results then.
+            controls.find('input[type=radio]').change(function (e) {
+                const inputValue = controls.find('input[type=search]').val();
+                const type = $(this).val();
+                // inputValue and type are sorted out, now do the search or clear the results
+                searchOrClear(inputValue,type);
+            })
+        });
+    </script>
+</head>
+<body>
+<header><span>Spotify Search</span></header>
+<div id="container">
+
+    <div id="controls">
+        <input type="search" name="search" placeholder="Search..."/>
+
+        <label>
+            <input type="radio" name="type" value="artist" checked>
+            Artist
+        </label>
+        <label>
+            <input type="radio" name="type" value="album">
+            Album
+        </label>
+        <label>
+            <input type="radio" name="type" value="track">
+            Track
+        </label>
+        <label>
+            <input type="radio" name="type" value="playlist">
+            Playlist
+        </label>
+    </div>
+    <div id="result" class="flexParent"></div>
+    <div class="clear"></div>
+</div>
+</body>
+</html>

@@ -371,7 +371,7 @@ fuel/app/logs/*/*/*
 fuel/app/cache/*/*
 ### Actionscript template
 # Build and Release Folders
-bin/
+/bin/
 bin-debug/
 bin-release/
 
@@ -611,3 +611,8 @@ local.properties
 /vendors/*
 
 # Created by .ignore support plugin (hsz.mobi)
+
+
+
+### explitly allowed:
+!assignment07/MusicApp/bin/www
