@@ -28,7 +28,12 @@
             url : inputValue
         }, function(response){
             resultDiv.empty();
-            resultDiv.append($('<img>').attr('src',response.path));
+            if (response.statu == 'ok') {
+                resultDiv.append($('<img>').attr('src',response.path));
+            } else {
+                resultDiv.html('<div>Please input a valid url like: www.google.de</div>');
+            };
+
         })
     });
 </script>
