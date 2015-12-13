@@ -35,13 +35,13 @@ router.get('/', function(req, res) {
         if (webadress.indexOf('//') != -1) {
             webadress = webadress.substr(index + 2);
         };
+
         var filename = webadress + '.png';
         var fullpath = path.join(__dirname, '../screenshots/' + filename);
 
         fs.exists(fullpath, function(exists) {
             console.log(exists ? "it's there" : "no file!");
             if (exists) {
-                console.log('hahaha');
                 res.send({
                     'statu': 'ok',
                     'path': '/shoot/screenshots/' + filename,
@@ -71,7 +71,7 @@ router.get('/', function(req, res) {
             'path': null,
             'message': null
         });
-    }
+    };
 });
 
 module.exports = router;
