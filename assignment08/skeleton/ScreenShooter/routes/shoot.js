@@ -1,6 +1,8 @@
 var express = require('express');
 var webshot = require('webshot');
 var path = require('path');
+var fs = require('fs');
+
 var app = express();
 var router = express.Router();
 
@@ -31,33 +33,43 @@ router.get('/', function(req, res) {
     if (checkWebAdress(webadress)) {
         // delete protocol head
         if (webadress.indexOf('//') != -1) {
-            webadress = webadress.substr(index+2);
+            webadress = webadress.substr(index + 2);
         };
         var filename = webadress + '.png';
-
-
-
         var fullpath = path.join(__dirname, '../screenshots/' + filename);
-        webshot(webadress, fullpath, function(err) {
-            if (err) {
-                res.send({
-                    'statu': 'error',
-                    'path': null,
-                    'message': null
-                });
-            } else {
+
+        fs.exists(fullpath, function(exists) {
+            console.log(exists ? "it's there" : "no file!");
+            if (exists) {
+                console.log('hahaha');
                 res.send({
                     'statu': 'ok',
                     'path': '/shoot/screenshots/' + filename,
                     'message': 're-used screenshot'
                 });
-            }
+            } else {
+                webshot(webadress, fullpath, function(err) {
+                    if (err) {
+                        res.send({
+                            'statu': 'error',
+                            'path': null,
+                            'message': null
+                        });
+                    } else {
+                        res.send({
+                            'statu': 'ok',
+                            'path': '/shoot/screenshots/' + filename,
+                            'message': 're-used screenshot'
+                        });
+                    };
+                });
+            };
         });
     } else {
         res.send({
-                    'statu': 'error',
-                    'path': null,
-                    'message': null
+            'statu': 'error',
+            'path': null,
+            'message': null
         });
     }
 });
