@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Notes App</title>
+    <link rel="stylesheet" href="stylesheets/notes.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="notification"></div>
+
+    <div class='brand'>Notes</div>
+    <div class="clear"></div>
+
+</header>
+<div id="container">
+    <form method="post" class="note" id="insertnote">
+        <input type="text" name="title" placeholder="Title of your note."/>
+        <label>
+            <textarea name="content" rows="5" placeholder="Content of your note."></textarea>
+        </label>
+        <input type="submit" name="submitNote" value="save"/>
+    </form>
+
+    <form method='post'>
+        <input type="submit" name="submitDelete" value="Delete selected notes" class="deleteNotesButton"/>
+        <div class="clear"></div>
+    </form>
+
+
+    <section class='notes'>
+        <div class="flexParent notesContainer">
+            <div class="clear"></div>
+        </div>
+    </section>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        /**
+         *
+         * The UI Handler encapsulates functionality to modify the User Interface / DOM.
+         *
+         */
+        function UIHandler() {
+            // how many notes are currently marked for removal?
+            var checkedItemCount = 0;
+            // the notification is a <div> in the header and can be used to display feedback
+            var notification = $('.notification');
+
+            // this is where the notes go.
+            var notesContainer = $('.notesContainer');
+
+            /**
+             *
+             * Whenever the user inserts or deletes notes, we need to re-initialize the checkboxes.
+             *
+             */
+            this.updateCheckboxes = function(){
+                var deleteButton = $('.deleteNotesButton');
+                var checkboxes = $('input[type=checkbox]');
+                // we need to update the visibilty / content of the delete button
+                // in two places:
+                // 1. whenever the user ticks a checkbox
+                // 2. after removing notes from the UI. --> hide the button.
+                var updateButton = function(){
+                    // showing / hiding is done with the class "show". Alternatively there is the class "hidden".
+                    if(checkedItemCount > 0){
+                        deleteButton.addClass('show');
+                    } else{
+                        deleteButton.removeClass('show');
+                    }
+                    // nice feedback to show how many checkboxes are currently ticked.
+                    deleteButton.val("Delete "+checkedItemCount+(checkedItemCount > 1 ? " notes." : " note."));
+                };
+
+                // whenever we update the checkboxes, we determine the number of currently checked checkboxes
+                checkedItemCount = checkboxes.find(':checked').length;
+
+                // to avoid adding multiple click listeners, we first remove all existing listeners.
+                checkboxes.off('click');
+                // re-attach the click listener.
+                // its main responsibility is to keep track of the current count.
+                checkboxes.click(function(e){
+                    if(this.checked){
+                        checkedItemCount++;
+                    } else{
+                        checkedItemCount--;
+                    }
+                    // the .deleteButton should be informed about the current count and either be shown or hidden
+                    updateButton();
+                });
+
+                // finally, update the visibility / contents of the .deleteButton.
+                updateButton();
+            };
+
+            /**
+             * display arbitrary messages in the notification bar inside the header
+             * messages are faded out after duration milliseconds (default: 5000)
+             */
+            this.showNotification = function (message, duration) {
+                notification.html(message);
+                notification.fadeIn(function(){
+                    setTimeout(function(){
+                        notification.fadeOut();
+                    },duration || 5000);
+                })
+            };
+
+            /**
+             *
+             * with this method, we can insert notes into the UI
+             * @param notes Array containing objects of form {_id: ..., title : ..., content : ...}
+             * @param pre Boolean if notes should be prepended instead of appended.
+             */
+            this.insertNotes = function (notes, pre) {
+
+                notes.forEach(function(note){
+                    // each note element needs to have three default classes for proper styling.
+                    var noteElement = $('<div>').addClass('note flexChild hidden');
+                    // create and append title
+                    noteElement.append($('<span class="title">').html(note.title));
+                    // create and append content
+                    noteElement.append($('<div class="content">').html(note.content));
+                    // create and append the checkbox that allows us to mark the note for deletion
+                    // we need to give it an appropriate value, in this case the notes' _id
+                    noteElement.append($('<input type="checkbox" name="delete[]">').val(note._id));
+
+                    // now append or prepend the newly created note
+                    if(pre){
+                        notesContainer.prepend(noteElement);
+                    }
+                    else{
+                        notesContainer.append(noteElement);
+                    }
+                    // since we gave it the class 'hidden' we still have to fade it in.
+                    // this is especially nice, when the user creates a new note.
+                    noteElement.fadeIn();
+                });
+                // since we now have new checkboxes, we need to update them,
+                // e.g. by attaching the proper event handlers
+                this.updateCheckboxes();
+            };
+
+            /**
+             * @param noteElements jQuery Object pointing to all notes that we want to remove from the UI
+             */
+            this.removeNotes = function(noteElements){
+                // inside the fadeOut handler, we do not have a reference to the UIHandler object,
+                // so we need to store it as a closure variable.
+                // self is commonly used for this purpose
+                var self = this;
+
+
+                noteElements.fadeOut(function(){
+                    // remove the note from the UI
+                    $(this).remove();
+                    // update the event listeners and currently checked count in the model.
+                    self.updateCheckboxes();
+                });
+            }
+        }
+
+
+        /**
+         * the API Handler takes care of all AJAX requests.
+         * The API is almost "CRUD" (create retrieve update delete). only the update functionality is missing here.
+         */
+        function APIHandler() {
+            const api = {
+                baseURL: '/',
+                notes: {
+                    "get": 'notes/',
+                    "post": "notes/insert",
+                    "delete": "notes/delete"
+                }
+            };
+            /**
+             * @param callback function that will receive the response object directly (JSON containing 'status', 'message' and 'notes')
+             */
+            this.fetchNotes = function(callback) {
+                $.get(api.baseURL + api.notes.get, callback)
+            };
+            /**
+             * @param title String the name of the note
+             * @param content String
+             * @param callback function that will receive the response object ({status: String, message: String, inserted : Array {_id,title,content}})
+             */
+            this.postNote = function (title, content,callback) {
+                $.ajax({
+                    type : 'POST',
+                    url :api.baseURL + api.notes.post,
+                    data : JSON.stringify({
+                        notes : {
+                            title : title,
+                            content : content
+                        }
+                    }),
+                    success : callback,
+                    dataType : 'json', // what do we expect from the server?
+                    contentType : 'application/json' // what do we provide to the server: JSON
+                });
+            };
+
+            /**
+             * @param ids Array of object IDs.
+             * @param callback function receiving a JSON containing the status
+             */
+            this.deleteNotes = function(ids,callback){
+                $.ajax({
+                    type : 'POST',
+                    url : api.baseURL + api.notes.delete,
+                    data : JSON.stringify({
+                        notes : ids
+                    }),
+                    success : callback,
+                    dataType : 'json',
+                    contentType : 'application/json'
+                })
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        // our singletons
+        var apiHandler = new APIHandler();
+        var uiHandler = new UIHandler();
+
+
+
+
+        /*
+         * on first load, lets fetch the existing notes.
+         */
+        apiHandler.fetchNotes(function (data) {
+            if (data.notes) {
+                // there is data, let's insert it into the UI
+                uiHandler.insertNotes(data.notes,true);
+            }
+            else if (data.status == 'error') {
+                // somehow this did not succeed, inform the user.
+                uiHandler.showNotification(data.message)
+            }
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //  E V E N T     H A N D L E R S
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // allow submitting a new note.
+        $('#insertnote').submit(function(e){
+
+            var titleElement = $(this).find('input[name=title]');
+            var contentElement = $(this).find('textarea[name=content]');
+
+            // the actual title and content
+            var title = titleElement.val();
+            var content = contentElement.val();
+
+            e.preventDefault(); // no page refresh.
+
+            // if we have either a title or a content (see Google Keep), then we proceed.
+            if(title.length > 0 || content.length > 0){
+                // the api handler knows how to insert the data,
+                // all we have to do is to handle the response.
+                apiHandler.postNote(title,content,function(data){
+                    // the response should contain a field 'inserted' that contains all the notes that were
+                    // stored in the database
+                    // !!! for now we only use the first one
+                    var insertedData = data.inserted ? data.inserted[0] : {};
+
+                    // in case an error occurred, let's inform the user
+                    if(data.status == 'error'){
+                        uiHandler.showNotification(data.message);
+                    }
+                    else{
+                        // all good, we can proceed with inserting the newly created note into the UI
+                        uiHandler.insertNotes([{
+                            _id : insertedData._id,
+                            title : insertedData.title,
+                            content : insertedData.content
+                        }],true); // true means: prepend the note.
+                    }
+                });
+                // now clear the form.
+                // note: this happens already if we still do not have a response from the server.
+                titleElement.val('');
+                contentElement.empty().val('');
+            }
+            else{ // both title and content are empty, let's not do anything but inform the user.
+                uiHandler.showNotification('Your note seems to be empty.');
+            }
+        });
+
+        // what to do, when the user clicks the delete notes button --> delete the notes from the Database and update the UI
+        $('.deleteNotesButton').click(function(e){
+            // only look for the checkboxes that are currently checked
+            var checkedBoxes = $('input:checked');
+
+            // we only need the IDs that are associated with them in their "value" attribute.
+            // instead of for-looping and pushing, we simply map the elements to ids.
+            var ids = $.map(checkedBoxes,function(item){
+                return $(item).val();
+            });
+            // prevent a page refresh
+            e.preventDefault();
+
+            // the api handler knows how to delete the data
+            // we have to update the UI once the api handler is done.
+            apiHandler.deleteNotes(ids,function(data){
+                // it went wrong, inform the user.
+                if(data.status == 'error'){
+                    uiHandler.showNotification(data.message);
+                }
+                // all good, remove the notes, which we simply get by removing the parent of the checkbox.
+                else if(data.status == 'success'){
+                    uiHandler.removeNotes(checkedBoxes.parent());
+                }
+            });
+        })
+    });
+</script>
+</body>
+</html>

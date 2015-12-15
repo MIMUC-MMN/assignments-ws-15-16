@@ -1,0 +1,191 @@
+body {
+  color: #212121;
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #eee;
+  padding: 0;
+  margin: 0;
+}
+section {
+  clear: both;
+}
+section.input {
+  text-align: center;
+}
+.button {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background-color: #77aaff;
+  color: white;
+}
+.button:hover {
+  background-color: #448aff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+form.note input,
+form.login input,
+form.register input,
+form.note textarea,
+form.login textarea,
+form.register textarea {
+  display: block;
+  width: 200px;
+  margin: 1em auto;
+  padding: 1em;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 11pt;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  color: #e91e63;
+}
+a:visited {
+  color: #c2185b;
+}
+a:hover,
+a:active {
+  color: #448aff;
+}
+header {
+  width: 100%;
+  margin: 0;
+  padding: 1em 0;
+  background-color: #e91e63;
+  color: white;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+header > * {
+  padding: 0 1em;
+}
+header .brand {
+  float: left;
+  width: 25%;
+  font-size: 20pt;
+}
+header .profile {
+  float: right;
+  text-align: right;
+  width: 25%;
+}
+header .profile .username {
+  float: right;
+  margin-right: 1em;
+}
+header .profile form.logout {
+  float: right;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background-color: #77aaff;
+  color: white;
+}
+header .profile form.logout:hover {
+  background-color: #448aff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+#container {
+  width: 80%;
+  margin: 70px auto;
+}
+#container input[type=submit] {
+  margin: 1em auto;
+  padding: 1em;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 11pt;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background-color: #77aaff;
+  color: white;
+}
+#container input[type=submit]:hover {
+  background-color: #448aff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+#container textarea {
+  font-family: Roboto, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
+.notification {
+  position: absolute;
+  top: 1em;
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: 0.1em;
+  width: 50%;
+  text-align: center;
+}
+.notification.error {
+  background-color: #f8bbd0;
+}
+div.note {
+  margin: 1em 1em 1em 0;
+  padding: 2em;
+  position: relative;
+  float: left;
+  width: 200px;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+div.note input[type=checkbox] {
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+}
+div.note .title {
+  font-size: 150%;
+}
+div.note .content {
+  margin: 1em 0 0 0;
+}
+input.deleteNotesButton {
+  margin: 1em auto;
+  padding: 1em;
+  border: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 11pt;
+  display: none;
+}
+input.deleteNotesButton.show {
+  display: block;
+}
+.flexParent {
+  display: flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: center;
+}
+.flexChild {
+  flex-grow: 1;
+  -webkit-flex-grow: 1;
+}
+.clear {
+  clear: both;
+}
+.hidden {
+  display: none;
+}
