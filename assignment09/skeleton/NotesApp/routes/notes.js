@@ -29,7 +29,7 @@ router.get('/', function (req, res) {
          {
             status : 'success',
             message : 'fetched notes',
-            notes : ... // array containing the inserted notes.
+            notes : ... // array containing the fetched notes.
          }
 
          In case of an error, adjust the response accordingly. The status and message fields are mandatory.
@@ -54,7 +54,7 @@ router.post('/insert', function (req, res) {
             {
                 status : 'success',
                 message : 'successfully inserted the note(s)',
-                notes : ... // array containing the inserted notes.
+                inserted : ... // array containing the inserted notes.
             }
 
             In case of an error, adjust the response accordingly. The status and message fields are mandatory.
