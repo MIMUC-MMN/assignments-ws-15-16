@@ -4,14 +4,18 @@ var fs = require('fs');
 var express = require('express');
 var router = express.Router();
 
-var FILE_TYPE = '.png';
+// prevent overriding by making this a const.
+const FILE_TYPE = '.png';
 
 // serving statics via the router, not the app!
 router.use('/screenshots', express.static(path.join(__dirname, '../screenshots')));
 
 router.get('/', function (req, res) {
     // we'll populate this later with the response-string
-    var response = {};
+    var response = {
+        status : '',
+        path : ''
+    };
 
     var target = req.query.url || 'www.mimuc.de';
 
@@ -23,13 +27,14 @@ router.get('/', function (req, res) {
      Perform some simple kind of URL-matching; non RFC-complete!
 
      Matches URLs that maybe have a protocol specified, may begin with www, and end
-     a sequence of arbitrary length with a 2-4 char TLD
+     a sequence of arbitrary length with a 2-4 char top level domain (TLD)
      */
     var r = /^(?:(?:http|https):\/\/)?(?:www\.)?[a-z0-9-_\.]+(?:\.\w{2,4})$/i;
     var isUrl = r.test(target);
 
     // we must remember to exit early, otherwise headers will already be sent!
     if (!isUrl) {
+        // easter egg :D
         res.json({'path': 'http://www.meme.rumbaar.net/cache/fail/1213522917738.jpg_595.jpg'});
         return;
     }
@@ -39,6 +44,8 @@ router.get('/', function (req, res) {
 
         // these properties are used for both responses
         response.status = 'ok';
+        // TODO: what if the index.js module changes the path to the shoot module?
+        // TS
         response.path = '/shoot/screenshots/' + filename;
 
         if (exists) {
