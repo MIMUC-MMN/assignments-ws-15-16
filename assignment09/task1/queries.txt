@@ -1,0 +1,28 @@
+> use mmn-baumanno
+switched to db mmn-baumanno
+> db.notes.insert([
+..     {
+...         "title": "Example note",
+...         "content": "This is just an example"
+...     },
+...     {
+...         "title" : "Christmas",
+...         "content" : "All I want is a good grade in online multimedia. And a boombox."
+...     }
+... ])
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+> db.notes.update({title: "Christmas"}, {$set: {content: "All I want for Christmas is You!"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.notes.remove({title: "Example note"})
+WriteResult({ "nRemoved" : 1 })
+> db.notes.find({}, {_id: 0})
+{ "title" : "Christmas", "content" : "All I want for Christmas is You!" }

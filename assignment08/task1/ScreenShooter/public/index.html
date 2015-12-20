@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Screen Scraper</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+<header><span>Spotify Search</span></header>
+<div id="container">
+    <form id="urlForm">
+        <input id="urlInput" type="text" name="url" placeholder="Url to Take Screenshot" />
+        <button id="go" type="submit">Go!</button>
+    </form>
+</div>
+<div id="result"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+    $('#urlForm').on('submit',function(e){
+        var inputValue = $('#urlInput').val();
+        var resultDiv = $('#result');
+
+        e.preventDefault();
+        resultDiv.empty();
+        resultDiv.html('<div>Loading...</div>');
+
+        $.get('/shoot',{
+            url : inputValue
+        }, function(response){
+            resultDiv.empty();
+            resultDiv.append($('<img>').attr('src',response.path));
+        })
+    });
+</script>
+</body>
+</html>
