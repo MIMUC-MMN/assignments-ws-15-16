@@ -21,19 +21,41 @@ notesCollection.options.multi = true;
  */
 router.get('/', function (req, res) {
     // find all notes, unless we find mongo selection parameters in the get request.
-    // TODO
-    // 1. query the database using the notesCollection
-    // 2. respond to the client with a JSON object
-    /*
-         The response should look like this in case of success:
-         {
-            status : 'success',
-            message : 'fetched notes',
-            notes : ... // array containing the fetched notes.
-         }
 
-         In case of an error, adjust the response accordingly. The status and message fields are mandatory.
-     */
+    // response-dummy, will be modified within monk-callback
+    var response = {
+        status: '',
+        message: '',
+        notes: []
+    };
+
+    // selection parameters, expected to be
+    var where = {};
+
+    // if we were passed selection parameters in the request: use them!
+    if (req.query.title) {
+        where.extend({title: req.query.title});
+    }
+
+    if (req.query.content) {
+        where.extend({content: req.query.content});
+    }
+
+    notesCollection.find(where, function (err, docs) {
+        if (err) {
+            response.status = 'failure';
+            response.message = err.message;
+
+        } else {
+            response.status = 'success';
+            response.message = 'inserted notes';
+            response.notes = docs;
+        }
+
+        res.json(response);
+    });
+
+
 });
 
 
@@ -43,22 +65,34 @@ router.get('/', function (req, res) {
  */
 router.post('/insert', function (req, res) {
     var notes;
+    var response = {
+        status: '',
+        message: '',
+        inserted: []
+    };
+
     // make sure the parsing succeeded and notes is not null.
     if (req.body && req.body.notes) {
-        // TODO
-        // 1. use the right method on notesCollection to insert the data
-        // 2. provide a callback function that is used when the insertion is done
-        // 3. make sure to send a JSON as response.
-        /*
-            The response should look like this in case of success:
-            {
-                status : 'success',
-                message : 'successfully inserted the note(s)',
-                inserted : ... // array containing the inserted notes.
+
+        if (req.body.notes instanceof Array) {
+            notes = req.body.notes;
+        } else if (req.body.notes instanceof Object) {
+            notes = [req.body.notes];
+        }
+
+        notesCollection.insert(notes, function (err, docs) {
+            if (err) {
+                response.status = 'failure';
+                response.message = err.message;
+
+            } else {
+                response.status = 'success';
+                response.message = 'successfully inserted the note(s)';
+                response.inserted = docs;
             }
 
-            In case of an error, adjust the response accordingly. The status and message fields are mandatory.
-         */
+            res.json(response);
+        });
     }
     // either the body-parser failed or the parameter "notes" is missing in the request.
     else {
