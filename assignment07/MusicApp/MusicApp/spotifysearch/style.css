@@ -1,0 +1,82 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+header {
+    width: 100%;
+    margin: 0;
+    padding: 1em;
+    background-color: #388E3C;
+    color: white;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+
+label {
+    display: block;
+    margin: 1em 0;
+}
+
+input[type=search]{
+    display: block;
+    width: 200px;
+    padding: 1em;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 11pt;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+}
+
+#container {
+    margin-top: 4em;
+    padding-left: 1em;
+}
+
+#controls {
+    width: 10%;
+    min-width: 210px;
+    float: left;
+}
+
+#result {
+    width: 80%;
+    float: left;
+}
+.item{
+    padding: 0.5em;
+    text-align: center;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    margin: 0 1em 1em 1em;
+    display: none;
+}
+.item .itemImage{
+    margin: 0 auto 0.5em auto;
+    display: block;
+}
+.clickable{
+    cursor: pointer;
+}
+.clickable:hover{
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
+}
+.flexParent {
+    display: flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.flexChild {
+    flex-grow: 1;
+    -webkit-flex-grow: 1;
+}
+
+.clear {
+    clear: both;
+}
