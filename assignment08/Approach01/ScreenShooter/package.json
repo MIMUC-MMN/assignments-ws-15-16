@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "startCIP": "nodejs ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -13,10 +14,6 @@
     "fs": "0.0.2",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
-<<<<<<< HEAD
-=======
-    "phantomjs": "^1.9.19",
->>>>>>> MIMUC-MMN/master
     "serve-favicon": "~2.3.0",
     "webshot": "^0.16.0"
   }
