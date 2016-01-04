@@ -6,7 +6,7 @@ var router = express.Router();
 
 
 // connect to a local database. We assume that we do not need a user name / password
-var db = require('monk')('localhost/mmn');
+var db = require('monk')('localhost/mmn-ou');
 
 // this collection holds our notes
 var notesCollection = db.get('notes');

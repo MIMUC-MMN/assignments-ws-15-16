@@ -1,0 +1,24 @@
+➜  assignments-ws-15-16/assignment09/skeleton/NotesApp/data master ✓ mongoimport --jsonArray --db mmn-ou --collection notes --file data.json
+2015-12-17T15:33:42.439+0100    connected to: localhost
+2015-12-17T15:33:42.469+0100    imported 2 documents
+➜  assignments-ws-15-16/assignment09/skeleton/NotesApp/data master ✓ mongo
+MongoDB shell version: 3.2.0
+connecting to: test
+> use mmn-ou
+switched to db mmn-ou
+> show dbs
+local   0.000GB
+mmn-ou  0.000GB
+test    0.000GB
+> show collections
+notes
+> db.notes.update( {title:"Christmas"}, {$set:{content:"May your life be filled with joy and happiness and may each new day bring you moments to cherish."}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.notes.find()
+{ "_id" : ObjectId("5672c7c6104e4cd31b10474a"), "title" : "Example note", "content" : "This is just an example" }
+{ "_id" : ObjectId("5672c7c6104e4cd31b10474b"), "title" : "Christmas", "content" : "May your life be filled with joy and happiness and may each new day bring you moments to cherish." }
+> db.notes.remove({title:"Example note"})
+WriteResult({ "nRemoved" : 1 })
+> db.notes.find()
+{ "_id" : ObjectId("5672c7c6104e4cd31b10474b"), "title" : "Christmas", "content" : "May your life be filled with joy and happiness and may each new day bring you moments to cherish." }
+>
