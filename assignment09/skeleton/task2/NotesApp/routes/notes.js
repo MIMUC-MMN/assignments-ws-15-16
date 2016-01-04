@@ -23,6 +23,20 @@ router.get('/', function (req, res) {
     // find all notes, unless we find mongo selection parameters in the get request.
     // TODO
     // 1. query the database using the notesCollection
+    notesCollection.find({}, function(err,docs){
+        var resp = {
+            status: '',
+            message: '',
+            notes: []
+        };
+        if (err) {
+            resp.status = 'fail';
+            resp.message = err.message;
+        } else {
+            resp.status = 'success';
+            resp.message = 'fetched notes';
+            resp.notes = docs;
+        }
     // 2. respond to the client with a JSON object
     /*
          The response should look like this in case of success:
@@ -34,6 +48,9 @@ router.get('/', function (req, res) {
 
          In case of an error, adjust the response accordingly. The status and message fields are mandatory.
      */
+        res.json(resp)
+    });
+
 });
 
 
@@ -47,7 +64,22 @@ router.post('/insert', function (req, res) {
     if (req.body && req.body.notes) {
         // TODO
         // 1. use the right method on notesCollection to insert the data
+        notes = req.body.notes;
         // 2. provide a callback function that is used when the insertion is done
+        notesCollection.insert(notes, function(err, docs){
+            var resp = {
+                status: '',
+                message: '',
+                notes: []
+            };
+            if (err) {
+                resp.status = 'fail';
+                resp.message = err.message;
+            } else {
+                resp.status = 'success';
+                resp.message = 'successfully inserted the note(s)';
+                resp.inserted = docs;
+            }
         // 3. make sure to send a JSON as response.
         /*
             The response should look like this in case of success:
@@ -59,6 +91,10 @@ router.post('/insert', function (req, res) {
 
             In case of an error, adjust the response accordingly. The status and message fields are mandatory.
          */
+            res.json(resp);
+        });
+
+
     }
     // either the body-parser failed or the parameter "notes" is missing in the request.
     else {
