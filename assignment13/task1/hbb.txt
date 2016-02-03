@@ -1,0 +1,28 @@
+a) What are the most anticipated features of HbbTV 2.0?
+
+HbbTv 2.0 will support companion devices, HTML5 experiences and
+delivery of advanced audio and video features such as multiple audio tracks and
+UltraHD.
+
+
+b) Is HbbTV capable of UltraHD? Which codec is mentioned for in this context?
+
+As mentioned above, Hbb 2.0 is supposed to be UltraHD-capable with delivery of
+such content via HEVC (High Efficiency Video Coding), the successor of the
+well-know and widespread H.264.
+
+
+c) Name 2 implications of “synchronization between TV, tablets and smartphones”
+
+The "main" content viewed on one device can be augmented with subtitles and
+further additional content provided on a secondary device.
+Also, content recorded on one device should be accessible from any other under
+the same licence, and programming a stationary home-recorder from afar should
+be supported.
+
+
+d) Is HbbTV 2.0 downward-compatible with older versions of HbbTV?
+
+HbbTv 2.0 is supposed to be downward-comaptible with versions 1.0 and 1.5,
+according to the article.
+
