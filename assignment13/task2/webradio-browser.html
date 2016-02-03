@@ -1,0 +1,262 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<dom-module id="webradio-browser">
+    <template>
+        <style>
+            :host{
+                text-align:center;
+            }
+            paper-radio-group{
+                width:100%;
+                text-align: center;
+            }
+            paper-radio-button{
+                margin-right: 1em;
+            }
+
+            paper-spinner{
+                margin: auto;
+            }
+            .page-buttons {
+                width: 100%;
+                text-align: center;
+            }
+
+            .page-buttons > paper-icon-button {
+                margin: 1em;
+            }
+        </style>
+        <iron-ajax
+                auto
+                params="{{makeAjaxParams(token,page,per_page)}}"
+                url="[[searchUrl]]"
+                last-response="{{stations}}"
+                loading="{{loading}}"
+        ></iron-ajax>
+
+        <div>
+            <!--
+                The reason this binding works is because 'selected' can be
+                used both as a getter and as a setter. When 'ready()' (see
+                below) fires, we programmatically set the property, which in
+                turn propagates down to the paper-radio-button with the
+                corresponding URL. Then, when we click a radio button, the
+                property changes again due to the getter-functionality. This is
+                then used in the data-binding to the AJAX-URL.
+            -->
+            <paper-radio-group selected="{{path}}">
+                <paper-radio-button name="popular">Most popular stations</paper-radio-button>
+                <paper-radio-button name="recent">Most recent stations</paper-radio-button>
+                <paper-radio-button name="">All stations</paper-radio-button>
+
+            </paper-radio-group>
+
+            <!-- A simple text-input providing filtering functionality -->
+            <paper-input label="Filter by..." id="filter" type="text" value="{{filterVal}}">
+                <paper-icon-button suffix on-tap="clearFilter" icon="clear"></paper-icon-button>
+            </paper-input>
+
+            <paper-spinner active="[[loading]]"></paper-spinner>
+            <paper-listbox>
+                <template is="dom-repeat"
+                          items="{{stations}}"
+                          as="station"
+                          filter="{{filter(filterVal)}}">
+
+                    <paper-icon-item>
+                        <paper-icon-button icon="av:play-circle-outline"
+                                           on-tap="playRadio"></paper-icon-button>
+
+                        <audio src="{{getFirstStreamURL(station)}}"></audio>
+
+                        <span>{{station.name}}</span>
+                    </paper-icon-item>
+
+                </template>
+            </paper-listbox>
+        </div>
+        <div class="page-buttons">
+
+            <paper-icon-button disabled="{{isFirstPage(page)}}"
+                               icon="arrow-back"
+                               on-tap="showPreviousPage"></paper-icon-button>
+            <span id="pageNumber">Page: {{page}}</span>
+
+            <paper-icon-button icon="arrow-forward"
+                               on-tap="showNextPage"></paper-icon-button>
+        </div>'
+    </template>
+    <script>
+
+        (function () {
+            Polymer({
+                is: 'webradio-browser',
+
+                properties: {
+                    token: { // Dirble.com API Token.
+                        type: String,
+                        value: 'your API token here'
+                    },
+                    page: { // page number used for pagination
+                        type: Number,
+                        value: 1, // the api starts counting at 1, not 0
+                        notify: true // this allows notifying the host
+                    },
+                    per_page: { // how many stations do we fetch per query?
+                        type: Number,
+                        value: 10
+                    },
+                    // this is the full search-url including the path-fragment
+                    searchUrl: {
+                        type: String,
+                        computed: 'computeUrl(path)'
+                    },
+                    // this is the base-URL for the API and is set directly on the
+                    // component 
+                    baseUrl: {
+                        type: String
+                    }
+                },
+
+                /**
+                 * Computes a search-url
+                 *
+                 * Given a path-fragment, take the base-url provided with the
+                 * component and return a valid search URL (espec. for Dirble).
+                 *
+                 */
+                computeUrl: function(path) {
+                    return this.baseUrl + path;
+                    
+                },
+
+                /**
+                 * Clears the search filter
+                 */
+                clearFilter: function () {
+                    document.getElementById('filter').value = "";
+                },
+
+                /*
+                   Solution of function returning a function courtesy of
+                   Josh Crowther,
+                   https://jcrowther.io/2015/06/09/polymer-dom-repeat-filtering-and-sorting/
+                   Outer function takes the filter-param, returned function
+                   takes one argument according to API-spec, which is the
+                   element that should be tested by the filter-callback.
+                */
+                filter: function (filterVal) {
+                    return function (station) {
+                        // do we have a valid filter? If not: return element
+                        if (!filterVal) {
+                            return true;
+                        }
+
+                        // do we have a valid station-obj? If not: don't spit
+                        // out anything 'undefined' or 'null' or otherwise
+                        // unworthy creatures
+                        if (!station) {
+                            return false;
+                        }
+
+                        // for an item to pass the filter, it should have a
+                        // valid name and contain the filter string somewhere in
+                        // its name
+                        return (station.name &&
+                                station.name.toLowerCase().indexOf(filterVal.toLowerCase()) > -1);
+                    };
+                },
+
+                // use the 'recent'-stations as a default selection
+                ready: function () {
+                    this.path = 'recent';
+                },
+
+                /**
+                 * Computed Binding
+                 * Wraps all necessary information to make an API call.
+                 * The cool thing is: token, page, and per_page are all properties.
+                 * That means, when they change, the makeAjaxParams function will be called
+                 * Because the 'auto' attribute is set on the <iron-ajax> element, it automatically
+                 * fetches the information!
+                 * @param token String your API token
+                 * @param page Number the requested page (starts at 1)
+                 * @param per_page Number : how many items should be fetched per page?
+                 * @returns {{token: *, page: *, per_page: *}}
+                 */
+                makeAjaxParams: function (token, page, per_page) {
+                    return {
+                        token: token,
+                        page: page,
+                        per_page: per_page
+                    }
+                },
+
+                /**
+                 * Computed Binding
+                 * This methods takes a webradio station from a dirble response
+                 * and looks for valid streams. It then returns the first available stream
+                 * The stream itself might not work, but that's another story.
+                 * @param station {{streams:Array}} an item inside a dirble api response.
+                 * @returns String containing the URL of the Stream
+                 */
+                getFirstStreamURL: function (station) {
+                    var stream = station.streams[0];
+                    return stream ? stream.stream : '';
+                },
+
+                /**
+                 * Computed Binding
+                 * Used to disable pagination buttons that can then be disabled on the first page.
+                 * @param page Number the current page
+                 * @returns {boolean} true if we're on the first page.
+                 */
+                isFirstPage: function (page) {
+                    return page == 1;
+                },
+
+                /**
+                 * Event Handler
+                 * Decrements the 'page' property by one.
+                 */
+                showPreviousPage: function () {
+                    this.page = this.page == 1 ? 1 : this.page - 1;
+                },
+
+                /**
+                 * Event Handler
+                 * Increments the 'page' by one.
+                 */
+                showNextPage: function () {
+                    this.page++;
+                },
+
+                /**
+                 * Event Handler
+                 * Starts an audio stream associated to e.target;
+                 * @param e Event - especially tap event. e.target.parentElement is the clicked play/pause button
+                 */
+                playRadio: function (e) {
+                    var button = e.target.parentElement; // parentElement, because target contains only the icon.
+                    var audio = button.parentElement.querySelector('audio'); // search for the relevant audio stream
+
+                    // okay, now we're just demonstrating / showing off, what syntactic sugar looks like in JS
+                    // start or stop the playback depending on its current 'paused' state
+                    audio.paused ? audio.play() : audio.pause();
+
+                    // toggle button icon depending on current playback state.
+                    button.icon = audio.paused ? 'av:play-circle-outline' : 'av:pause-circle-outline';
+                }
+            });
+        })();
+    </script>
+</dom-module>
