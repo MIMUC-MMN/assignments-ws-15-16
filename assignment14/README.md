@@ -2,4 +2,4 @@
 
 ## Exam preparation ##
 
-Here we are collection solutions for assignment sheet 14.
+Here we are collecting solutions for assignment sheet 14.
