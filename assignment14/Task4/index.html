@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Get Movies</title>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script>
+            
+            $(document).ready(function(){                                   // Make sure DOM is loaded
+     
+            var output = $('#output');            
+                
+            function handleMoviesResponse(movies){
+                
+                var outputBuffer = '';                                      // Iam writing everything in a variable (*1)
+                
+                $.each(movies, function(index,movie){                       // $.each is a jquery based, quick foreach loop 
+                    outputBuffer += "<div><h2>" + movie.name + " (" + 
+                        movie.year + " )</h2><ul>";
+                    
+                    $.each(movie.cast, function(index,cast){                // We are looping inside the loop and directly
+                        outputBuffer += "<li>" + cast + "</li>";            // acessing the cast
+                    })
+                    outputBuffer += "</ul></div>";
+                });
+                output.append(outputBuffer);                                // (*1) And append it as a final step
+            }
+                
+                
+            function requestMovies(){
+                $.get('movie.json').done(function(data){                    // This is a jQuery based AJAX get request
+                    handleMoviesResponse(data);                             // movie.json is replacing 'http://movi.es' for 
+                });                                                         // demonstrating purposes
+            }
+            requestMovies();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="output"><h1>Movies</h1></div>
+    </body></html>

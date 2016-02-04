@@ -1,0 +1,17 @@
+[
+ {
+ "name" : "Inside Out",
+ "year" : 2015,
+ "cast": ["Amy Poehler", "Bill Hader","Lewis Black"]
+ },
+ {
+ "name" : "The Revenant",
+ "year" : 2015,
+ "cast" : ["Leonardo DiCaprio","Tom Hardy","Will Poulter"]
+ },
+ {
+ "name" : "Fight Club",
+ "year" : 1999,
+ "cast" : ["Brad Pitt","Edward Norton","Helena Bonham Carter"]
+ }
+]

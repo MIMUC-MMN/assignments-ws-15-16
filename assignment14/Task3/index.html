@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Stop! Rectangle-Time.</title>
+    </head>
+    <body>
+        <div><input type="number" placeholder="20"
+                    oninput="drawRectangle(event)"/></div>
+        <div><canvas id="myCanvas" width="600"
+                     height="600"></canvas></div>
+        <script>
+            var canvas, context;
+            function clearCanvas(){
+                context.clearRect(0,0,
+                                  context.canvas.width,
+                                  context.canvas.height);
+                context.cle
+            }
+            
+            canvas = document.getElementById('myCanvas');
+            context = canvas.getContext('2d');
+            
+            function drawRectangle(e){
+                var size = document.querySelector('input').value;
+                // var size = document.querySelectorAll('input')[0].value; (could be used alternative)
+                // var size = document.getElementsByTagName('input')[0].value; (could be used alternative)
+                clearCanvas();
+                
+                context.fillStyle = '#ff00ff';
+                context.fillRect(0,0,size,size);
+                
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Get Movies</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+        <link rel="import" href="../bower_components/polymer/polymer.html">
+        <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+    </head>
+    <body>
+           
+        <div id="output">
+            <h1>Movies</h1>
+            <iron-ajax auto
+                       url="http://movi.es" 
+                       last-response="{{moviesResponse}}"></iron-ajax>
+            <template is="dom-repeat"
+                      items="[[moviesResponse]]"
+                      as="movie">
+                <h2>[[movie.name]] ([[movie.year]])</h2>
+                <ul>
+                    <template is="dom-repeat"
+                              items="[[movie.cast]]"
+                              as="actor">
+                        <li>[[actor]]</li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+        
+        
+    </body></html>
