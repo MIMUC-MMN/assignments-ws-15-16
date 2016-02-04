@@ -6,5 +6,5 @@
 # Install
 Run `npm install` in your local directory. 
 
-# Rund
+# Run
 Run `node app.js` in your local directory. Browse localhost:1337
