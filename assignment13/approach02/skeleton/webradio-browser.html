@@ -1,0 +1,243 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<dom-module id="webradio-browser">
+    <template>
+        <style>
+            :host{
+                text-align:center;
+            }
+            paper-radio-group{
+                width:100%;
+                text-align: center;
+            }
+            paper-radio-button{
+                margin-right: 1em;
+            }
+
+            paper-spinner{
+                margin: auto;
+            }
+            .page-buttons {
+                width: 100%;
+                text-align: center;
+            }
+
+            .page-buttons > paper-icon-button {
+                margin: 1em;
+            }
+        </style>
+        <iron-ajax
+                auto
+                params="{{makeAjaxParams(token,page,per_page)}}"
+                url="{{requestUrl}}"
+                last-response="{{stations}}"
+                loading="{{loading}}"
+        ></iron-ajax>
+
+        <div>
+            <paper-radio-group selected="{{radioSelected}}">
+                <paper-radio-button name="popular">Most popular stations</paper-radio-button>
+                <paper-radio-button name="recent">Most recent stations</paper-radio-button>
+                <paper-radio-button name="stations/">All stations</paper-radio-button>
+
+            </paper-radio-group>
+            <paper-spinner active="[[loading]]"></paper-spinner>
+            <paper-listbox>
+                <template is="dom-repeat"
+                          items="{{stations}}"
+                          as="station">
+
+                    <paper-icon-item>
+                        <paper-icon-button icon="av:play-circle-outline"
+                                           on-tap="playRadio"></paper-icon-button>
+
+                        <audio src="{{getFirstStreamURL(station)}}"></audio>
+
+                        <span>{{station.name}}</span>
+                    </paper-icon-item>
+
+                </template>
+            </paper-listbox>
+        </div>
+        <div class="page-buttons">
+
+            <paper-icon-button disabled="{{isFirstPage(page)}}"
+                               icon="arrow-back"
+                               on-tap="showPreviousPage"></paper-icon-button>
+            <span id="pageNumber">Page: {{page}}</span>
+
+            <paper-icon-button icon="arrow-forward"
+                               on-tap="showNextPage"></paper-icon-button>
+        </div>
+    </template>
+    <script>
+        (function () {
+            Polymer({
+                is: 'webradio-browser',
+                
+                // Version B:
+                // ready : function(){
+                // this.radioSelected = 'http://api.dirble.com/v2/stations/popular'},
+                properties: {
+                    
+                    // Version A (declared as property)
+                    //radioSelected:{
+                    //    type: String,
+                    //    value: 'http://api.dirble.com/v2/stations/popular',
+                    //    notify:true
+                    //},
+                    
+                    // Version C (Computed property)
+                    radioSelected: {    // Part 1: Selectbox property
+                      type: String,
+                      value: 'popular',
+                      notify: true
+                    },
+                    baseUrl:{   // Part 2: BaseUrl property
+                        type: String,
+                        value: 'http://api.dirble.com/v2/stations/',
+                    },
+                    requestUrl: {   // Part 3: Compute requestUrl
+                      type: String,
+                      computed: 'computeRequestUrl(baseUrl, radioSelected)'
+                    },
+                    token: { // Dirble.com API Token.
+                        type: String,
+                        value: 'mylittlesecret'
+                        // get your API Token here: https://dirble.com/users/sign_in
+                        // then go to https://dirble.com/users/apikeys
+                        // find the api documentation here: https://dirble.com/api-doc#get-popular-stations
+                    },
+                    page: { // page number used for pagination
+                        type: Number,
+                        value: 1, // the api starts counting at 1, not 0
+                        notify: true // this allows notifying the host
+                    },
+                    per_page: { // how many stations do we fetch per query?
+                        type: Number,
+                        value: 10
+                    },
+                },
+                /** Computed Binding
+                 * Generates the requestUrl for restAPI
+                 * @param baseUrl Url Sring to rest API 
+                 * @param radioSelected String of name property from selected radio button
+                **/
+                computeRequestUrl: function(baseUrl, radioSelected) {
+                    return baseUrl + radioSelected;
+                },
+
+                /**
+                 * Computed Binding
+                 * Wraps all necessary information to make an API call.
+                 * The cool thing is: token, page, and per_page are all properties.
+                 * That means, when they change, the makeAjaxParams function will be called
+                 * Because the 'auto' attribute is set on the <iron-ajax> element, it automatically
+                 * fetches the information!
+                 * @param token String your API token
+                 * @param page Number the requested page (starts at 1)
+                 * @param per_page Number : how many items should be fetched per page?
+                 * @returns {{token: *, page: *, per_page: *}}
+                 */
+                makeAjaxParams: function (token, page, per_page) {
+                    return {
+                        token: token,
+                        page: page,
+                        per_page: per_page
+                    }
+                },
+
+                /**
+                 * Computed Binding
+                 * This methods takes a webradio station from a dirble response
+                 * and looks for valid streams. It then returns the first available stream
+                 * The stream itself might not work, but that's another story.
+                 * @param station {{streams:Array}} an item inside a dirble api response.
+                 * @returns String containing the URL of the Stream
+                 */
+                getFirstStreamURL: function (station) {
+                    var stream = station.streams[0];
+                    return stream ? stream.stream : '';
+                },
+
+                /**
+                 * Computed Binding
+                 * Used to disable pagination buttons that can then be disabled on the first page.
+                 * @param page Number the current page
+                 * @returns {boolean} true if we're on the first page.
+                 */
+                isFirstPage: function (page) {
+                    return page == 1;
+                },
+
+                /**
+                 * Event Handler
+                 * Decrements the 'page' property by one.
+                 * Calls Ajax request because "page" is a parameter
+                 * @param page Number the requested page (starts at 1)
+                 */
+                showPreviousPage: function () {
+                    this.page = this.page == 1 ? 1 : this.page - 1;
+                },
+
+                /**
+                 * Event Handler
+                 * Increments the 'page' by one.
+                 * Calls Ajax request because "page" is a parameter
+                 * @param page Number the requested page (starts at 1)
+                 */
+                showNextPage: function () {
+                    this.page++;
+                },
+
+                /**
+                 * Event Handler
+                 * Starts an audio stream associated to e.target;
+                 * @param e Event - especially tap event. e.target.parentElement is the clicked play/pause button
+                 */
+                playRadio: function (e) {
+                    var button = e.target.parentElement; // parentElement, because target contains only the icon.
+                    var audio = button.parentElement.querySelector('audio'); // search for the relevant audio stream
+                    var allAudioElements = document.querySelectorAll('audio');
+                    
+                    
+                    /**
+                    You do fancy syntactic stuff, however its not cool that multple stations can be
+                    played at the same time. Therfore I was making the whole thing more robust.
+                    */
+                    
+                    // We don't have to search the dom if the clicked track is the one which is playing...
+                    if(audio.paused == false){ 
+                        // ...because then we can simply pause it
+                        audio.pause();
+                        button.icon = 'av:play-circle-outline';
+                    }
+                    else{
+                        // Otherwhise we search the dom to 
+                        // prevent multiple playbacks in the same time, search for playing station and pause it...
+                        [].forEach.call(allAudioElements, function(audio) {                        
+                            var button = audio.parentElement.querySelector('paper-icon-button');
+
+                            if(audio.paused == false){
+                                audio.pause();
+                                button.icon = 'av:play-circle-outline';
+                            }
+                        });
+                        
+                        // And now we start the one we want to play
+                        audio.play();
+                        button.icon = 'av:pause-circle-outline';
+                    }
+                }
+            });
+        })();
+    </script>
+</dom-module>

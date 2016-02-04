@@ -1,0 +1,12 @@
+{
+  "name": "MMN Assignment 13",
+  "description": "",
+  "homepage": "",
+  "keywords": [],
+  "author": "Tobias Seitz",
+  "private": true,
+  "dependencies": {
+    "iron-elements": "PolymerElements/iron-elements#^1.0.7",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7"
+  }
+}
