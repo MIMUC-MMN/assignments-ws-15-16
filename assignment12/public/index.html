@@ -1,0 +1,360 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>Polymer Basics</title>
+        <meta charset=utf-8/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <!-- Polyfill -->
+        <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+        <!-- Import Elements-->
+        <link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+        <link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+        <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+        <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+        <link rel="import" href="../bower_components/paper-tab/paper-tab.html">
+        <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+        <link rel="import" href="../bower_components/paper-button/paper-button.html">
+        <link rel="import" href="../bower_components/paper-card/paper-card.html">
+        <link rel="import" href="../bower_components/paper-input/paper-input.html">
+        <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+        <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+        <link rel="import" href="../bower_components/iron-icons/av-icons.html">
+
+        <!-- Import Flexbox -->
+        <link rel="import" href="../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+
+        <!-- Import External Plugin IronGrid -->
+        <link rel="import" href="../bower_components/iron-grid/iron-grid.html">
+
+        <!-- Stylesheet-->
+        <link rel="stylesheet" href="styles.css" >
+
+
+        <body>
+            <template is="dom-bind">
+                <paper-drawer-panel>
+                    <paper-header-panel drawer>
+                        <paper-toolbar class="medium-tall">
+                            <div class="title">Menu</div>
+                        </paper-toolbar>
+                        <ul>
+                            <li>
+                                <iron-icon icon="icons:view-quilt"></iron-icon>Browse
+                            </li>
+                            <li>
+                                <iron-icon icon="av:radio">Radio</iron-icon>Radio
+                            </li>
+                        </ul>
+                    </paper-header-panel>
+                    <paper-header-panel main>
+                        <paper-toolbar class="medium-tall">
+                            <paper-icon-button icon="menu" paper-drawer-toggle ></paper-icon-button>
+                            <div class="title">Music Library</div>
+                            <paper-tabs class="bottom fit"                 type="number"
+                                        selected="{{selectedPage}}" flex>
+                                <paper-tab>Artist</paper-tab>
+                                <paper-tab>Album</paper-tab>
+                                <paper-tab>Playlist</paper-tab>
+                            </paper-tabs>                        
+                        </paper-toolbar>
+                        <iron-pages selected="{{selectedPage}}">
+
+                            <!-- ####################### Page 1 #######################-->   
+                            <div>
+                                <iron-grid-container>
+                                    <iron-grid>
+
+                                        <!-- 3 divs in a row -->   
+                                        <div class="m12 s12 xs12 l12">
+                                            <paper-card>
+                                                <img src="img/artist/labra.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">La Brassbanda</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m6 s6 xs12 l6">
+                                            <paper-card>
+                                                <img src="img/artist/kraftklub.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Kraftklub</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+
+                                        <div class="m6 s6 xs12 l6">
+                                            <paper-card>
+                                                <img src="img/artist/ed.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Ed Sheeran</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/artist/beatles.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">The Beatles</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/artist/pinkfloyd.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Pink Floyd</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/artist/nirvana.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Nirvana</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/artist/supertramp.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Supertramp</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                    </iron-grid>
+                                </iron-grid-container>
+                            </div>
+
+                            <!-- ####################### Page 2 #######################-->   
+                            <div>
+                                <iron-grid-container>
+                                    <iron-grid>
+                                        <div class="m12 s12 xs12 l12">
+                                            <h3>Classics</h3>
+                                        </div>
+                                        <!-- 4,3,1 divs in a row -->   
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/cash.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Jonny Cash</div>
+                                                        <div class="small">The Man Comes Around</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/floyd.jpeg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Pink Floyd</div>
+                                                        <div class="small">Wish you where here</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/nirvana.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Nirvana</div>
+                                                        <div class="small">In Utero</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/beatles.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">The Beatles</div>
+                                                        <div class="small">Lonley Hearts</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/doors.jpeg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">The Doors</div>
+                                                        <div class="small">Strange Days</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m4 s6 xs12 l3">
+                                            <paper-card>
+                                                <img src="img/cover/Supertramp.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Supertramp</div>
+                                                        <div class="small">Breakfast in America</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <!-- 2,1 divs in a row -->
+                                        <div class="m12 s12 xs12 l12">
+                                            <h3>Featured</h3>
+                                        </div>
+
+                                        <div class="m6 s12 xs12 l6">
+                                            <paper-card>
+                                                <img src="img/cover/labra_techno.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">La Brassbanda</div>
+                                                        <div class="small">Techno</div>
+                                                    </div>
+                                                </div>
+                                            </paper-card>
+                                        </div>
+
+                                        <div class="m6 s12 xs12 l6">
+                                            <paper-card>
+                                                <img src="img/cover/ed_sheeran-x.jpg"/>
+                                                <div class="card-content">
+                                                    <div class="title">
+                                                        <div class="medium">Ed Sheran</div>
+                                                        <div class="small">X</div>
+                                                    </div>
+                                                </div>
+                                                </div>
+
+                                            <!-- 4,3,1 divs in a row -->   
+
+                                            <div class="m12 s12 xs12 l12">
+                                                <h3>Recent</h3>
+                                            </div>
+
+                                            <div class="m4 s6 xs12 l3">
+                                                <paper-card>
+                                                    <img src="img/cover/sublime.jpg"/>
+                                                    <div class="card-content">
+                                                        <div class="title">
+                                                            <div class="medium">Sublime</div>
+                                                            <div class="small">Gold</div>
+                                                        </div>
+                                                    </div>
+                                                </paper-card>
+                                            </div>
+
+                                            <div class="m4 s6 xs12 l3">
+                                                <paper-card>
+                                                    <img src="img/cover/labra_europa.jpg"/>
+                                                    <div class="card-content">
+                                                        <div class="title">
+                                                            <div class="medium">La Brassbanda</div>
+                                                            <div class="small">Europa</div>
+                                                        </div>
+                                                    </div>
+                                                </paper-card>
+                                            </div>
+
+                                            <div class="m4 s6 xs12 l3">
+                                                <paper-card>
+                                                    <img src="img/cover/kraftmk.jpg"/>
+                                                    <div class="card-content">
+                                                        <div class="title">
+                                                            <div class="medium">Kraftklub</div>
+                                                            <div class="small">Mit K</div>
+                                                        </div>
+                                                    </div>
+                                                </paper-card>
+                                            </div>
+                                            </iron-grid>
+                                        </iron-grid-container>
+                                    </div>
+                                <!-- ####################### Page 3 #######################-->   
+                                <div>
+                                    <iron-grid-container>
+                                        <iron-grid>
+                                            <div class="m12 s12 xs12 l12">
+                                                <h3>Playlists</h3>
+                                            </div>
+                                        </iron-grid>
+                                    </iron-grid-container>
+                                    <ul class="playlist">
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Recent</span>
+                                            <span class="small details">18 songs</span>
+                                        </li>
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Classics</span>
+                                            <span class="small details">28 songs</span>
+                                        </li>
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Rock</span>
+                                            <span class="small details">52 songs</span>
+                                        </li>
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Romance</span>
+                                            <span class="small details">38 songs</span>
+                                        </li>
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Indie</span>
+                                            <span class="small details">65 songs</span>
+                                        </li>
+                                        <li>
+                                            <iron-icon icon="av:play-circle-filled"></iron-icon>
+                                            <span class="medium margin">Pop</span>
+                                            <span class="small details">40 songs</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </iron-pages>
+                            </paper-header-panel>
+                        </paper-drawer-panel>
+                    </template>
+                </body>
+
+
+            <script>
+                document.addEventListener('WebComponentsReady', function () {
+                    var template = document.querySelector('template[is="dom-bind"]');
+                    template.selectedPage = 0; // selected is an index by default
+                });
+            </script>
+            </html>
