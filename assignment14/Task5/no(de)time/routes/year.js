@@ -1,7 +1,6 @@
 /*Includes*/
 var express = require('express');
 var bodyParser = require('body-parser');
-var router = express.Router();          // Important, don't forget to import
 
 var app = express();
 app.use(bodyParser.json());
@@ -34,5 +33,5 @@ app.get('/time',function(req,res){
 
 });
 
-module.exports = router;                // Expose module
+module.exports = app;                   // Expose module !important do not forget
 app.listen(1337);                       //Bind to port
