@@ -1,0 +1,197 @@
+@darkPrimaryColor:   #C2185B;
+@primaryColor:       #E91E63;
+@lightPrimaryColor:  #F8BBD0;
+@textPrimaryColor:   #FFFFFF;
+@accentColor:        #448AFF;
+@primaryTextColor:   #212121;
+@secondaryTextColor: #727272;
+@dividerColor:       #B6B6B6;
+
+
+body{
+  color: @primaryTextColor;
+  font-family:  Helvetica, Arial, sans-serif;
+  background-color: #eee;
+  padding:0;
+  margin:0;
+}
+
+section{
+  clear: both;
+  &.input{
+    text-align: center;
+  }
+
+}
+
+.standardInput(){
+  margin: 1em auto;
+  padding: 1em;
+  border: none;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+  font-size: 11pt;
+}
+
+.button{
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background-color: lighten(@accentColor,10%);
+  color: white;
+  &:hover{
+    background-color: @accentColor;
+    cursor: pointer;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+}
+
+
+form{
+  &.note, &.login, &.register{
+    input, textarea{
+      display: block;
+      width: 200px;
+      .standardInput();
+    }
+
+  }
+  &.login{
+
+  }
+  &.register{
+
+  }
+}
+
+a{
+  text-decoration: none;
+  &:link{
+    color: @primaryColor;
+  }
+  &:visited{
+    color: @darkPrimaryColor
+  }
+  &:hover,&:active{
+    color: @accentColor;
+  }
+}
+
+header{
+  width:100%;
+  margin:0;
+  padding: 1em 0;
+  background-color: @primaryColor;
+  color: white;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  & > * {
+    padding: 0 1em;
+  }
+  .brand{
+    float: left;
+    width: 25%;
+    font-size: 20pt;
+  }
+
+  .profile{
+    float:right;
+    text-align: right;
+    width: 25%;
+    .username{
+      float:right;
+      margin-right: 1em;
+    }
+    form.logout{
+      float:right;
+      .button;
+    }
+  }
+}
+
+#container {
+  width: 80%;
+  margin: 70px auto;
+  input[type=submit] {
+    .standardInput();
+    .button();
+  }
+  textarea{
+    font-family: Roboto, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  }
+}
+
+.notification{
+  position: absolute;
+  top: 1em;
+  left:0;
+  right:0;
+  margin: auto;
+  padding: 0.1em;
+  width: 50%;
+  text-align: center;
+  &.success{
+
+  }
+  &.error{
+    background-color: @lightPrimaryColor;
+  }
+}
+
+div.note{
+  margin: 1em 1em 1em 0;
+  padding: 2em;
+  position: relative;
+  float: left;
+  width: 200px;
+  background-color: white;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  input[type=checkbox]{
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+  }
+  .title{
+    font-size: 150%;
+  }
+  .content{
+    margin: 1em 0 0 0;
+  }
+}
+
+input.deleteNotesButton{
+  .standardInput();
+  display:none;
+  &.show{
+    display: block;
+  }
+}
+
+
+
+
+.flexParent{
+  display: flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:center;
+  align-items: stretch;
+  align-content: center;
+}
+.flexChild{
+  flex-grow: 1;
+  -webkit-flex-grow: 1;
+}
+
+.clear{
+  clear: both;
+}
+
+.hidden{
+  display: none;
+}
